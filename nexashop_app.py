@@ -8,7 +8,9 @@ import os
 from datetime import datetime, timedelta
 import random
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "nexashop.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH  = os.path.join(BASE_DIR, "nexashop.db")
+STATIC   = os.path.join(BASE_DIR, "static")
 
 SCHEMA = """
 -- Utilisateurs (acheteurs & vendeurs)
