@@ -1,0 +1,17 @@
+# Base de données locale (sera recréée sur le serveur)
+nexashop.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+.venv/
+
+# Dossier static généré
+static/
+
+# OS
+.DS_Store
+Thumbs.db
