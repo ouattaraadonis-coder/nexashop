@@ -25,14 +25,17 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Boutiques (un vendeur = une boutique)
 CREATE TABLE IF NOT EXISTS shops (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    seller_id   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    name        TEXT    NOT NULL,
-    description TEXT,
-    logo        TEXT,
-    rating      REAL    DEFAULT 0,
-    total_sales INTEGER DEFAULT 0,
-    created_at  TEXT    DEFAULT (datetime('now'))
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    seller_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name             TEXT    NOT NULL,
+    description      TEXT,
+    logo             TEXT,
+    wave_number      TEXT,                  -- Numéro Wave du vendeur ex: +2250700000000
+    rating           REAL    DEFAULT 0,
+    total_sales      INTEGER DEFAULT 0,
+    subscription_paid INTEGER DEFAULT 0,   -- 1 = abonnement 3000 FCFA payé
+    subscription_date TEXT,                -- date du paiement
+    created_at       TEXT    DEFAULT (datetime('now'))
 );
 
 -- Catégories
@@ -68,7 +71,8 @@ CREATE TABLE IF NOT EXISTS orders (
     buyer_id     INTEGER NOT NULL REFERENCES users(id),
     total_amount REAL    NOT NULL,
     status       TEXT    NOT NULL DEFAULT 'processing'
-                         CHECK(status IN ('processing','shipped','delivered','cancelled')),
+                         CHECK(status IN ('pending','processing','shipped','delivered','cancelled')),
+    payment_ref  TEXT,
     promo_code   TEXT,
     discount     REAL    DEFAULT 0,
     created_at   TEXT    DEFAULT (datetime('now')),
@@ -157,14 +161,14 @@ def seed(conn):
 
     # ---- Boutiques ----
     shops = [
-        (1, "L'Atelier Mode",    "Mode & accessoires artisanaux",   "👗"),
-        (6, "TechPro Store",     "High-tech reconditionné & neuf",  "💻"),
-        (7, "Galerie Iris",      "Art contemporain & collection",   "🎨"),
-        (8, "Terre & Plantes",   "Bio, naturel & bien-être",        "🌿"),
+        (1, "L'Atelier Mode",    "Mode & accessoires artisanaux",   "👗", "+2250701000001", 1),
+        (6, "TechPro Store",     "High-tech reconditionné & neuf",  "💻", "+2250701000002", 1),
+        (7, "Galerie Iris",      "Art contemporain & collection",   "🎨", "+2250701000003", 1),
+        (8, "Terre & Plantes",   "Bio, naturel & bien-être",        "🌿", "+2250701000004", 1),
     ]
     for s in shops:
         cur.execute(
-            "INSERT OR IGNORE INTO shops(seller_id,name,description,logo) VALUES(?,?,?,?)", s
+            "INSERT OR IGNORE INTO shops(seller_id,name,description,logo,wave_number,subscription_paid) VALUES(?,?,?,?,?,?)", s
         )
 
     # ---- Produits ----
