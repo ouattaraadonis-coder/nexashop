@@ -79,7 +79,7 @@ def send_sms(to_number, message):
 # ==============================================================================
 NEXASHOP_WAVE_NUMBER = os.environ.get("NEXASHOP_WAVE_NUMBER", "+2250700000000")
 SUBSCRIPTION_FEE     = 3000
-DELIVERY_FEE         = 2500
+DELIVERY_FEE         = 0
 FRONTEND_URL         = os.environ.get("FRONTEND_URL", "https://stupendous-axolotl-b342fa.netlify.app")
 
 def make_wave_link(phone_number, amount, description=""):
@@ -883,7 +883,6 @@ def check_promo():
 def wave_checkout():
     d     = request.json or {}
     items = d.get("items", [])
-    promo = d.get("promo_code")
     if not items:
         return jsonify({"error": "Panier vide"}), 400
 
@@ -916,17 +915,10 @@ def wave_checkout():
         by_shop[sid]["items"].append({**dict(prod), "quantity": item["quantity"]})
         by_shop[sid]["subtotal"] += subtotal
 
-    discount = 0
-    if promo:
-        pc = q("SELECT * FROM promo_codes WHERE code=%s AND is_active=1", (promo.upper(),), one=True)
-        if pc:
-            discount  = round(total_all * pc["discount"] / 100)
-            total_all -= discount
-
-    total_all = int(round(total_all)) + DELIVERY_FEE
+    total_all = int(round(total_all))
     order_id  = run_returning(
-        "INSERT INTO orders(buyer_id,total_amount,discount,promo_code,status) VALUES(%s,%s,%s,%s,'pending') RETURNING id",
-        (g.current_user["id"], total_all, discount, promo)
+        "INSERT INTO orders(buyer_id,total_amount,discount,status) VALUES(%s,%s,0,'pending') RETURNING id",
+        (g.current_user["id"], total_all)
     )
     for sid, sd in by_shop.items():
         for item in sd["items"]:
@@ -945,8 +937,7 @@ def wave_checkout():
             "items_count": sum(i["quantity"] for i in sd["items"]),
         })
 
-    return jsonify({"order_id": order_id, "total": total_all, "discount": discount,
-                    "delivery": DELIVERY_FEE, "wave_links": wave_links})
+    return jsonify({"order_id": order_id, "total": total_all, "wave_links": wave_links})
 
 
 @app.route("/api/payment/wave/confirm/<int:order_id>", methods=["POST"])
@@ -964,9 +955,6 @@ def wave_confirm(order_id):
     for item in items:
         run("UPDATE products SET stock=stock-%s WHERE id=%s", (item["quantity"], item["product_id"]))
         run("UPDATE shops SET total_sales=total_sales+%s WHERE id=%s", (item["quantity"], item["shop_id"]))
-
-    if order["promo_code"]:
-        run("UPDATE promo_codes SET used_count=used_count+1 WHERE code=%s", (order["promo_code"],))
 
     shops_in_order = q("""
         SELECT DISTINCT s.id, s.name, s.wave_number, s.seller_id
