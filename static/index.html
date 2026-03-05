@@ -1437,6 +1437,7 @@
     <li><a onclick="showPage('home')" class="active" id="nav-home">Accueil</a></li>
     <li><a onclick="showPage('catalogue')" id="nav-catalogue">Catalogue</a></li>
     <li><a onclick="showPage('dashboard')" id="nav-dashboard">Espace Vendeur</a></li>
+    <li><a onclick="showPage('tracking')" id="nav-tracking">📦 Suivi</a></li>
     <li><a onclick="showPage('admin')" id="nav-admin" style="display:none;">⚙️ Admin</a></li>
     <li><a onclick="showPage('cart')" id="nav-cart">Panier <span id="cart-count" style="color:var(--gold)"></span></a></li>
   </ul>
@@ -1456,6 +1457,7 @@
   <a onclick="showPage('home');toggleMobileMenu()" id="mob-home">🏠 Accueil</a>
   <a onclick="showPage('catalogue');toggleMobileMenu()" id="mob-catalogue">🛍️ Catalogue</a>
   <a onclick="showPage('dashboard');toggleMobileMenu()" id="mob-dashboard">📊 Espace Vendeur</a>
+  <a onclick="showPage('tracking');toggleMobileMenu()" id="mob-tracking">📦 Suivi commande</a>
   <a onclick="showPage('admin');toggleMobileMenu()" id="mob-admin" style="display:none;">⚙️ Admin</a>
   <a onclick="showPage('cart');toggleMobileMenu()" id="mob-cart">🛒 Panier <span id="cart-count-mobile" style="color:var(--gold)"></span></a>
 </div>
@@ -1477,7 +1479,7 @@
         <em>Prospérez.</em>
       </h1>
       <p class="hero-subtitle">
-        NexaShop By THE CODE, connecte vendeurs passionnés et acheteurs exigeants. 
+        NexaShop By The Code, connecte vendeurs passionnés et acheteurs exigeants. 
         Découvrez des produits uniques ou lancez votre boutique en quelques minutes.
       </p>
       <div class="hero-ctas">
@@ -1769,12 +1771,35 @@
   </div>
 </div>
 
-<!-- ===== CART PAGE ===== -->
+<!-- ===== TRACKING PAGE ===== -->
+<div id="page-tracking" class="page">
+  <div class="page-inner" style="padding:32px 40px;max-width:800px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:3rem;margin-bottom:12px;">📦</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#e8e0f5;margin-bottom:8px;">Suivi de commande</h1>
+      <p style="color:#6b5f8a;font-size:0.9rem;margin-bottom:24px;">Entrez votre numéro de suivi ou de commande</p>
+      <div style="display:flex;gap:8px;max-width:480px;margin:0 auto;">
+        <input type="text" id="track-input" placeholder="N° de suivi ou N° de commande"
+               style="flex:1;background:#1a1430;border:1px solid rgba(124,58,237,0.3);color:#e8e0f5;
+                      padding:12px 16px;border-radius:4px;font-size:0.9rem;outline:none;">
+        <button onclick="trackOrder()"
+                style="background:var(--violet);color:white;border:none;padding:12px 20px;
+                       border-radius:4px;cursor:pointer;font-weight:600;">
+          🔍 Suivre
+        </button>
+      </div>
+    </div>
+    <div id="tracking-result"></div>
+    <div id="my-orders-section" style="display:none;margin-top:32px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#e8e0f5;margin-bottom:16px;">📋 Mes commandes</h2>
+      <div id="my-orders-list"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== ADMIN PAGE ===== -->
 <div id="page-admin" class="page">
   <div class="page-inner" style="padding:32px 40px;max-width:1200px;margin:0 auto;">
-
-    <!-- Header -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
       <div>
         <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#e8e0f5;">
@@ -1786,44 +1811,25 @@
         🔄 Actualiser
       </button>
     </div>
-
-    <!-- KPIs globaux -->
     <div id="admin-kpis" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
       <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
         <div style="font-size:2rem;margin-bottom:4px;">⏳</div>
         <div style="color:#6b5f8a;font-size:0.8rem;">Chargement...</div>
       </div>
     </div>
-
-    <!-- Onglets -->
     <div style="display:flex;gap:4px;margin-bottom:24px;background:#1a1430;border-radius:6px;padding:4px;width:fit-content;">
-      <button onclick="adminTab('vendors')" id="atab-vendors"
-              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:var(--violet);color:white;">
-        🏪 Vendeurs
-      </button>
-      <button onclick="adminTab('orders')" id="atab-orders"
-              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">
-        📦 Commandes
-      </button>
-      <button onclick="adminTab('users')" id="atab-users"
-              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">
-        👥 Utilisateurs
-      </button>
-      <button onclick="adminTab('products')" id="atab-products"
-              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">
-        🛍️ Produits
-      </button>
+      <button onclick="adminTab('vendors')" id="atab-vendors" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:var(--violet);color:white;">🏪 Vendeurs</button>
+      <button onclick="adminTab('orders')" id="atab-orders" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">📦 Commandes</button>
+      <button onclick="adminTab('users')" id="atab-users" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">👥 Utilisateurs</button>
+      <button onclick="adminTab('products')" id="atab-products" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">🛍️ Produits</button>
     </div>
-
-    <!-- Contenu onglets -->
     <div id="admin-content">
       <div style="text-align:center;padding:60px;color:#6b5f8a;">Chargement...</div>
     </div>
-
   </div>
 </div>
 
-<!-- ===== CART PAGE ===== -->
+
   <div class="page-inner" style="padding-bottom:0;">
     <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;margin-bottom:8px;color:#e8e0f5;">Votre Panier</h1>
     <p style="color:#6b5f8a;font-size:0.9rem;margin-bottom:0;" id="cart-subtitle">3 articles de 2 vendeurs</p>
@@ -1977,7 +1983,301 @@
     if (name === 'cart')      renderCart();
     if (name === 'dashboard') await loadDashboard();
     if (name === 'admin')     await loadAdmin();
+    if (name === 'tracking')  await loadTrackingPage();
     window.scrollTo(0, 0);
+  }
+
+  // ══ LIVRAISON & SUIVI ════════════════════════════════
+
+  const DELIVERY_STATUS_INFO = {
+    preparing:        { emoji:'📦', label:'Préparé / Emballé',      color:'#a78bfa' },
+    handed_over:      { emoji:'🚛', label:'Remis au transporteur',  color:'#60a5fa' },
+    in_transit:       { emoji:'🔄', label:'En transit',             color:'#f59e0b' },
+    out_for_delivery: { emoji:'🛵', label:'En cours de livraison',  color:'#f59e0b' },
+    delivered:        { emoji:'✅', label:'Livré',                  color:'#4ade80' },
+    returned:         { emoji:'↩️', label:'Retourné',               color:'#f87171' },
+  };
+
+  async function loadTrackingPage() {
+    if (currentUser && currentUser.role === 'buyer') {
+      document.getElementById('my-orders-section').style.display = 'block';
+      await loadMyOrders();
+    }
+  }
+
+  async function loadMyOrders() {
+    const list = document.getElementById('my-orders-list');
+    try {
+      const orders = await api('GET', '/orders');
+      if (!orders.length) {
+        list.innerHTML = '<p style="color:#6b5f8a;text-align:center;">Aucune commande</p>';
+        return;
+      }
+      list.innerHTML = orders.map(o => `
+        <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;
+                    padding:16px 20px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;"
+             onclick="trackByOrderId(${o.id})">
+          <div>
+            <div style="font-weight:600;color:#e8e0f5;">Commande #${o.id}</div>
+            <div style="font-size:0.8rem;color:#6b5f8a;">${new Date(o.created_at).toLocaleDateString('fr-FR')}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-family:'DM Mono',monospace;color:#d4a843;">${formatCFA(o.total_amount)}</span>
+            <span style="background:rgba(124,58,237,0.15);color:#a78bfa;padding:3px 10px;border-radius:2px;font-size:0.75rem;">
+              ${o.status}
+            </span>
+            <span style="color:#6b5f8a;">›</span>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) { list.innerHTML = '<p style="color:#f87171;">Erreur chargement</p>'; }
+  }
+
+  async function trackByOrderId(orderId) {
+    document.getElementById('track-input').value = orderId;
+    await trackOrder();
+  }
+
+  async function trackOrder() {
+    const input   = document.getElementById('track-input').value.trim();
+    const result  = document.getElementById('tracking-result');
+    if (!input) return;
+    result.innerHTML = '<div style="text-align:center;padding:20px;color:#6b5f8a;">Recherche...</div>';
+    try {
+      let data;
+      // Si numéro numérique → recherche par order_id
+      if (/^\d+$/.test(input)) {
+        data = await api('GET', `/orders/${input}/delivery`);
+      } else {
+        data = await fetch(`${API}/track/${input}`).then(r => r.json());
+        if (data.error) throw new Error(data.error);
+      }
+      renderTrackingResult(data.delivery, data.events);
+    } catch(e) {
+      result.innerHTML = `
+        <div style="text-align:center;padding:32px;background:#1a1430;border:1px solid rgba(248,113,113,0.2);border-radius:6px;">
+          <div style="font-size:2rem;margin-bottom:8px;">😕</div>
+          <p style="color:#f87171;">Aucun suivi trouvé pour "${input}"</p>
+          <p style="color:#6b5f8a;font-size:0.82rem;margin-top:4px;">Vérifiez votre numéro ou contactez le vendeur</p>
+        </div>`;
+    }
+  }
+
+  function renderTrackingResult(delivery, events) {
+    const result   = document.getElementById('tracking-result');
+    const info     = DELIVERY_STATUS_INFO[delivery.status] || { emoji:'📦', label:delivery.status, color:'#a78bfa' };
+    const isPickup = delivery.delivery_type === 'pickup';
+
+    const timeline = events.map((ev, i) => {
+      const evInfo  = DELIVERY_STATUS_INFO[ev.status] || { emoji:'📌', label:ev.status, color:'#a78bfa' };
+      const isLast  = i === events.length - 1;
+      return `
+        <div style="display:flex;gap:16px;margin-bottom:${isLast ? 0 : 20}px;">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:36px;height:36px;border-radius:50%;background:${isLast ? evInfo.color : 'rgba(124,58,237,0.2)'};
+                        display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">
+              ${evInfo.emoji}
+            </div>
+            ${!isLast ? `<div style="width:2px;flex:1;background:rgba(124,58,237,0.15);margin:4px 0;min-height:20px;"></div>` : ''}
+          </div>
+          <div style="padding-top:6px;">
+            <div style="font-weight:600;color:${isLast ? evInfo.color : '#e8e0f5'};font-size:0.9rem;">${evInfo.label}</div>
+            <div style="color:#a99cc5;font-size:0.82rem;margin-top:2px;">${ev.description || ''}</div>
+            ${ev.location ? `<div style="color:#6b5f8a;font-size:0.78rem;margin-top:2px;">📍 ${ev.location}</div>` : ''}
+            <div style="color:#6b5f8a;font-size:0.75rem;margin-top:4px;">${new Date(ev.created_at).toLocaleString('fr-FR')}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    result.innerHTML = `
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:8px;overflow:hidden;">
+        <!-- Header statut -->
+        <div style="background:rgba(124,58,237,0.1);padding:20px 24px;border-bottom:1px solid rgba(124,58,237,0.15);">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div style="font-size:0.78rem;color:#6b5f8a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">
+                Commande #${delivery.order_id}
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:1.5rem;">${info.emoji}</span>
+                <span style="font-size:1.1rem;font-weight:700;color:${info.color};">${info.label}</span>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.78rem;color:#6b5f8a;">Type</div>
+              <div style="color:#e8e0f5;font-weight:600;">${isPickup ? '🏪 Retrait en boutique' : '🚚 Livraison à domicile'}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Infos livraison -->
+        <div style="padding:20px 24px;border-bottom:1px solid rgba(124,58,237,0.1);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
+          ${delivery.tracking_number ? `
+            <div>
+              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Numéro de suivi</div>
+              <div style="font-family:'DM Mono',monospace;color:#a78bfa;font-size:0.88rem;">${delivery.tracking_number}</div>
+              ${delivery.carrier_url ? `<a href="${delivery.carrier_url}" target="_blank" style="font-size:0.75rem;color:#d4a843;text-decoration:none;">Suivre sur ${delivery.carrier || 'le site'} →</a>` : ''}
+            </div>` : ''}
+          ${delivery.carrier ? `
+            <div>
+              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Transporteur</div>
+              <div style="color:#e8e0f5;">${delivery.carrier}</div>
+            </div>` : ''}
+          ${delivery.estimated_date ? `
+            <div>
+              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Livraison estimée</div>
+              <div style="color:#e8e0f5;">${new Date(delivery.estimated_date).toLocaleDateString('fr-FR')}</div>
+            </div>` : ''}
+          ${delivery.delivered_at ? `
+            <div>
+              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Livré le</div>
+              <div style="color:#4ade80;font-weight:600;">${new Date(delivery.delivered_at).toLocaleString('fr-FR')}</div>
+            </div>` : ''}
+        </div>
+
+        <!-- Timeline -->
+        <div style="padding:24px;">
+          <div style="font-size:0.8rem;font-weight:600;color:#6b5f8a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:20px;">
+            Historique
+          </div>
+          ${timeline || '<p style="color:#6b5f8a;font-size:0.85rem;">Aucun événement</p>'}
+        </div>
+      </div>
+    `;
+  }
+
+  // ══ LIVRAISON VENDEUR (dans le dashboard) ══════════
+
+  async function loadSellerDeliveries() {
+    try {
+      const deliveries = await api('GET', '/deliveries');
+      return deliveries;
+    } catch(e) { return []; }
+  }
+
+  function renderDeliveryForm(orderId) {
+    const existing = document.getElementById(`delivery-form-${orderId}`);
+    if (existing) { existing.remove(); return; }
+
+    const container = document.getElementById(`delivery-row-${orderId}`);
+    if (!container) return;
+
+    const form = document.createElement('div');
+    form.id = `delivery-form-${orderId}`;
+    form.style.cssText = 'background:#0d0a18;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;margin-top:10px;';
+    form.innerHTML = `
+      <h4 style="color:#e8e0f5;font-size:0.9rem;font-weight:600;margin-bottom:16px;">🚚 Créer le suivi — Commande #${orderId}</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Type de livraison</label>
+          <select id="dtype-${orderId}" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+            <option value="delivery">🚚 Livraison à domicile</option>
+            <option value="pickup">🏪 Retrait en boutique</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Date estimée</label>
+          <input type="date" id="destdate-${orderId}" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Transporteur</label>
+          <input type="text" id="dcarrier-${orderId}" placeholder="Ex: DHL, Yango..." style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Numéro de suivi</label>
+          <input type="text" id="dtracking-${orderId}" placeholder="Ex: NEXA-2026-001" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Note (optionnel)</label>
+        <input type="text" id="dnotes-${orderId}" placeholder="Instructions de livraison..." style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="createDelivery(${orderId})"
+                style="flex:1;background:var(--violet);color:white;border:none;padding:10px;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.85rem;">
+          ✅ Créer le suivi
+        </button>
+        <button onclick="document.getElementById('delivery-form-${orderId}').remove()"
+                style="padding:10px 16px;background:transparent;border:1px solid rgba(124,58,237,0.2);color:#6b5f8a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
+          Annuler
+        </button>
+      </div>
+    `;
+    container.after(form);
+  }
+
+  async function createDelivery(orderId) {
+    try {
+      await api('POST', `/orders/${orderId}/delivery`, {
+        delivery_type:   document.getElementById(`dtype-${orderId}`)?.value,
+        carrier:         document.getElementById(`dcarrier-${orderId}`)?.value,
+        tracking_number: document.getElementById(`dtracking-${orderId}`)?.value,
+        estimated_date:  document.getElementById(`destdate-${orderId}`)?.value || null,
+        notes:           document.getElementById(`dnotes-${orderId}`)?.value,
+      });
+      document.getElementById(`delivery-form-${orderId}`)?.remove();
+      showToast(`✅ Suivi créé pour la commande #${orderId}`);
+      await loadDashboard();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
+
+  function renderUpdateStatusForm(deliveryId, orderId) {
+    const existing = document.getElementById(`status-form-${deliveryId}`);
+    if (existing) { existing.remove(); return; }
+
+    const container = document.getElementById(`delivery-row-${orderId}`);
+    if (!container) return;
+
+    const form = document.createElement('div');
+    form.id = `status-form-${deliveryId}`;
+    form.style.cssText = 'background:#0d0a18;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;margin-top:10px;';
+    form.innerHTML = `
+      <h4 style="color:#e8e0f5;font-size:0.9rem;font-weight:600;margin-bottom:16px;">🔄 Mettre à jour le statut</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Nouveau statut</label>
+          <select id="ustatus-${deliveryId}" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+            <option value="preparing">📦 Préparé / Emballé</option>
+            <option value="handed_over">🚛 Remis au transporteur</option>
+            <option value="in_transit">🔄 En transit</option>
+            <option value="out_for_delivery">🛵 En cours de livraison</option>
+            <option value="delivered">✅ Livré</option>
+            <option value="returned">↩️ Retourné</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Localisation</label>
+          <input type="text" id="ulocation-${deliveryId}" placeholder="Ex: Abidjan, Cocody" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Message pour le client</label>
+        <input type="text" id="unotes-${deliveryId}" placeholder="Ex: Colis en cours de livraison, sera livré cet après-midi" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="updateDeliveryStatus(${deliveryId}, ${orderId})"
+                style="flex:1;background:var(--violet);color:white;border:none;padding:10px;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.85rem;">
+          ✅ Mettre à jour
+        </button>
+        <button onclick="document.getElementById('status-form-${deliveryId}').remove()"
+                style="padding:10px 16px;background:transparent;border:1px solid rgba(124,58,237,0.2);color:#6b5f8a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
+          Annuler
+        </button>
+      </div>
+    `;
+    container.after(form);
+  }
+
+  async function updateDeliveryStatus(deliveryId, orderId) {
+    try {
+      const status   = document.getElementById(`ustatus-${deliveryId}`)?.value;
+      const notes    = document.getElementById(`unotes-${deliveryId}`)?.value;
+      const location = document.getElementById(`ulocation-${deliveryId}`)?.value;
+      await api('PUT', `/deliveries/${deliveryId}/status`, { status, notes, location });
+      document.getElementById(`status-form-${deliveryId}`)?.remove();
+      showToast(`✅ Statut mis à jour !`);
+      await loadDashboard();
+    } catch(e) { showToast('❌ ' + e.message); }
   }
 
   // ══ CATALOGUE ════════════════════════════════════════
@@ -2420,18 +2720,97 @@
   }
 
   function renderOrders(orders) {
-    const labels = { processing:'En préparation', shipped:'Expédié', delivered:'Livré', cancelled:'Annulé' };
-    document.getElementById('orders-body').innerHTML = orders.length
+    const labels = { pending:'En attente', processing:'En préparation', shipped:'Expédié', delivered:'Livré', cancelled:'Annulé' };
+    const tbody = document.getElementById('orders-body');
+    if (!tbody) return;
+
+    // Mettre à jour les headers
+    const thead = tbody.closest('table')?.querySelector('thead tr');
+    if (thead) thead.innerHTML = '<th>Commande</th><th>Client</th><th>Produits</th><th>Montant</th><th>Date</th><th>Statut</th><th>Livraison</th>';
+
+    tbody.innerHTML = orders.length
       ? orders.map(o => `
-        <tr>
+        <tr id="delivery-row-${o.id}">
           <td><code style="font-family:'DM Mono',monospace;font-size:0.82rem;">#${o.id}</code></td>
           <td>${o.buyer_name || '—'}</td>
-          <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product_names || '—'}</td>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product_names || '—'}</td>
           <td style="font-family:'DM Mono',monospace;font-weight:600;">${formatCFA(o.subtotal||o.total_amount||0)}</td>
           <td style="color:#6b5f8a;">${o.created_at?.slice(0,10) || '—'}</td>
           <td><span class="status-badge status-${o.status}">${labels[o.status] || o.status}</span></td>
+          <td id="delivery-cell-${o.id}">
+            <button onclick="loadOrderDelivery(${o.id})" id="delivery-btn-${o.id}"
+                    style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;
+                           padding:5px 10px;border-radius:3px;cursor:pointer;font-size:0.75rem;white-space:nowrap;">
+              📦 Suivi
+            </button>
+          </td>
+        </tr>
+        <tr id="delivery-detail-${o.id}" style="display:none;">
+          <td colspan="7" style="padding:0 16px 12px;"></td>
         </tr>`).join('')
-      : '<tr><td colspan="6" style="text-align:center;color:#6b5f8a;padding:32px;">Aucune commande</td></tr>';
+      : '<tr><td colspan="7" style="text-align:center;color:#6b5f8a;padding:32px;">Aucune commande</td></tr>';
+  }
+
+  async function loadOrderDelivery(orderId) {
+    const detailRow = document.getElementById(`delivery-detail-${orderId}`);
+    const cell      = detailRow?.querySelector('td');
+    if (!detailRow) return;
+
+    // Toggle
+    if (detailRow.style.display !== 'none') {
+      detailRow.style.display = 'none';
+      return;
+    }
+    detailRow.style.display = 'table-row';
+    cell.innerHTML = '<div style="padding:12px;color:#6b5f8a;font-size:0.85rem;">Chargement...</div>';
+
+    try {
+      const data = await api('GET', `/orders/${orderId}/delivery`);
+      const d    = data.delivery;
+      const info = DELIVERY_STATUS_INFO[d.status] || { emoji:'📦', label:d.status, color:'#a78bfa' };
+      const events = data.events || [];
+
+      cell.innerHTML = `
+        <div style="background:#0d0a18;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:1.2rem;">${info.emoji}</span>
+              <span style="font-weight:600;color:${info.color};">${info.label}</span>
+              ${d.tracking_number ? `<span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:#6b5f8a;">— ${d.tracking_number}</span>` : ''}
+            </div>
+            <button onclick="renderUpdateStatusForm(${d.id}, ${orderId})"
+                    style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;
+                           padding:6px 14px;border-radius:3px;cursor:pointer;font-size:0.78rem;">
+              ✏️ Changer statut
+            </button>
+          </div>
+          <!-- Mini timeline -->
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            ${['preparing','handed_over','in_transit','out_for_delivery','delivered'].map(s => {
+              const si     = DELIVERY_STATUS_INFO[s];
+              const done   = events.some(ev => ev.status === s);
+              const active = d.status === s;
+              return `<div style="flex:1;min-width:60px;text-align:center;padding:6px 4px;border-radius:4px;
+                               background:${active ? si.color+'22' : done ? 'rgba(74,222,128,0.08)' : 'rgba(124,58,237,0.05)'};
+                               border:1px solid ${active ? si.color+'44' : done ? 'rgba(74,222,128,0.15)' : 'rgba(124,58,237,0.1)'};
+                               opacity:${done || active ? 1 : 0.4};">
+                        <div style="font-size:1rem;">${si.emoji}</div>
+                        <div style="font-size:0.65rem;color:${active ? si.color : done ? '#4ade80' : '#6b5f8a'};margin-top:2px;">${si.label.split('/')[0].trim()}</div>
+                      </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    } catch(e) {
+      // Pas encore de livraison créée
+      cell.innerHTML = `
+        <div style="background:#0d0a18;border:1px solid rgba(124,58,237,0.15);border-radius:6px;padding:16px;text-align:center;">
+          <p style="color:#6b5f8a;font-size:0.85rem;margin-bottom:12px;">Aucun suivi créé pour cette commande</p>
+          <button onclick="renderDeliveryForm(${orderId})"
+                  style="background:var(--violet);color:white;border:none;padding:8px 20px;border-radius:4px;cursor:pointer;font-size:0.85rem;font-weight:600;">
+            🚚 Créer le suivi
+          </button>
+        </div>`;
+    }
   }
 
   function updateDashHeader(shop, kpi) {
