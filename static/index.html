@@ -1477,7 +1477,7 @@
         <em>Prospérez.</em>
       </h1>
       <p class="hero-subtitle">
-        NexaShop By THE CODE, connecte vendeurs passionnés et acheteurs exigeants. 
+        NexaShop By The Code, connecte vendeurs passionnés et acheteurs exigeants. 
         Découvrez des produits uniques ou lancez votre boutique en quelques minutes.
       </p>
       <div class="hero-ctas">
@@ -3037,12 +3037,72 @@
     setTimeout(() => t.classList.remove('show'), 3500);
   }
 
+  // ══ PUSH NOTIFICATIONS ══════════════════════════════
+  let pushSubscription = null;
+
+  async function initPushNotifications() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      navigator.serviceWorker.addEventListener('message', e => {
+        if (e.data?.type === 'NAVIGATE') showPage('home');
+      });
+      if (currentUser) await subscribeToPush(reg);
+    } catch(e) { console.log('[Push] Erreur SW:', e); }
+  }
+
+  async function subscribeToPush(reg) {
+    try {
+      const keyRes = await api('GET', '/push/vapid-public-key');
+      if (!keyRes.public_key || keyRes.public_key.includes('Placeholder')) return;
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') return;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly:      true,
+        applicationServerKey: urlBase64ToUint8Array(keyRes.public_key),
+      });
+      pushSubscription = sub;
+      const s = sub.toJSON();
+      await api('POST', '/push/subscribe', {
+        endpoint: s.endpoint,
+        keys: { p256dh: s.keys.p256dh, auth: s.keys.auth }
+      });
+      console.log('[Push] ✅ Souscription enregistrée');
+    } catch(e) { console.log('[Push] Souscription échouée:', e); }
+  }
+
+  function urlBase64ToUint8Array(b64) {
+    const pad = '='.repeat((4 - b64.length % 4) % 4);
+    const raw = atob((b64 + pad).replace(/-/g,'+').replace(/_/g,'/'));
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  // ══ UTILITAIRES ══════════════════════════════════════
+  function showLoader(containerId, count) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = Array(count).fill(`
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.15);border-radius:4px;overflow:hidden;animation:pulse 1.5s infinite;">
+        <div style="height:180px;background:linear-gradient(90deg,#1a1430,#221b33,#1a1430);background-size:200%;"></div>
+        <div style="padding:16px;"><div style="height:12px;background:#221b33;border-radius:2px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:#221b33;border-radius:2px;width:60%;"></div></div>
+      </div>`).join('');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
   // ══ INIT ══════════════════════════════════════════════
   (async () => {
     updateCartBadge();
     updateNavUser();
     await checkApiStatus();
     await checkPaymentReturn();
+    await initPushNotifications();
     try {
       const data = await api('GET', '/products?limit=12');
       products = data.products;
