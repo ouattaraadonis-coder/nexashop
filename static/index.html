@@ -1479,7 +1479,7 @@
         <em>Prospérez.</em>
       </h1>
       <p class="hero-subtitle">
-        NexaShop By The Code, connecte vendeurs passionnés et acheteurs exigeants. 
+        NexaShop, connecte vendeurs passionnés et acheteurs exigeants. 
         Découvrez des produits uniques ou lancez votre boutique en quelques minutes.
       </p>
       <div class="hero-ctas">
@@ -3468,5 +3468,81 @@
     50%      { opacity:0.5; }
   }
 </style>
+<!-- ===== FOOTER ===== -->
+<footer style="background:#0d0a18;border-top:1px solid rgba(124,58,237,0.15);padding:48px 40px 24px;margin-top:80px;">
+  <div style="max-width:1200px;margin:0 auto;">
+
+    <!-- Grille principale -->
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;">
+
+      <!-- Colonne marque -->
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#e8e0f5;margin-bottom:8px;">
+          Nexa<span style="color:var(--gold);font-style:italic;">Shop</span>
+        </div>
+        <p style="color:#6b5f8a;font-size:0.85rem;line-height:1.6;margin-bottom:16px;">
+          La place de marché ivoirienne. Achetez, vendez et prospérez en toute confiance.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <a href="tel:+2250758684027" style="color:#a78bfa;font-size:0.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;">
+            🚨 <strong>Urgence :</strong>&nbsp;+225 07 58 68 40 27
+          </a>
+          <a href="mailto:admin@nexashop.ci" style="color:#6b5f8a;font-size:0.82rem;text-decoration:none;">
+            ✉️ admin@nexashop.ci
+          </a>
+        </div>
+      </div>
+
+      <!-- Colonne navigation -->
+      <div>
+        <div style="font-size:0.75rem;font-weight:700;color:#e8e0f5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Navigation</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a onclick="showPage('home')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Accueil</a>
+          <a onclick="showPage('catalogue')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Catalogue</a>
+          <a onclick="showPage('tracking')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Suivi commande</a>
+          <a onclick="showPage('dashboard')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Espace vendeur</a>
+        </div>
+      </div>
+
+      <!-- Colonne vendeurs -->
+      <div>
+        <div style="font-size:0.75rem;font-weight:700;color:#e8e0f5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Vendeurs</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a onclick="openModal('register')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Créer ma boutique</a>
+          <a onclick="showPage('dashboard')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Mon tableau de bord</a>
+          <span style="color:#6b5f8a;font-size:0.85rem;">Abonnement : 3 000 FCFA</span>
+          <span style="color:#6b5f8a;font-size:0.85rem;">Paiement via Wave</span>
+        </div>
+      </div>
+
+      <!-- Colonne paiement -->
+      <div>
+        <div style="font-size:0.75rem;font-weight:700;color:#e8e0f5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Paiement</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);color:#d4a843;padding:4px 10px;border-radius:4px;font-size:0.78rem;font-weight:600;">📱 Wave</span>
+          </div>
+          <span style="color:#6b5f8a;font-size:0.82rem;">Paiement direct vendeur</span>
+          <span style="color:#6b5f8a;font-size:0.82rem;">100% sécurisé</span>
+          <span style="color:#6b5f8a;font-size:0.82rem;">Prix en FCFA</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Séparateur -->
+    <div style="border-top:1px solid rgba(124,58,237,0.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div style="color:#6b5f8a;font-size:0.78rem;">
+        © 2026 <span style="color:#a78bfa;font-weight:600;">NexaShop</span> — 
+        Conçu par <span style="color:#d4a843;font-weight:600;">The Code</span> · Tous droits réservés
+      </div>
+      <div style="color:#4a3f5c;font-size:0.72rem;letter-spacing:0.05em;">
+        NEXA BY THE CODE 2026 ✦
+      </div>
+    </div>
+
+  </div>
+</footer>
+
 </body>
 </html>
