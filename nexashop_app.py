@@ -26,6 +26,15 @@ DATABASE_URL = os.environ.get(
 app = Flask(__name__, static_folder=STATIC, static_url_path="")
 app.secret_key = "nexashop_secret_2026"
 
+_db_initialized = False
+
+@app.before_request
+def ensure_db():
+    global _db_initialized
+    if not _db_initialized:
+        init_db()
+        _db_initialized = True
+
 # ==============================================================================
 # TWILIO SMS
 # ==============================================================================
