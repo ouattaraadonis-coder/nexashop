@@ -13,23 +13,34 @@
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
   :root {
-    --ink:         #080612;
-    --deep:        #0e0b1a;
-    --surface:     #141020;
-    --card:        #1c1730;
-    --card-hover:  #231e3a;
-    --border:      rgba(167,139,250,0.12);
-    --border-gold: rgba(212,168,67,0.25);
-    --gold:        #d4a843;
-    --gold-light:  #f0c96a;
-    --gold-dim:    rgba(212,168,67,0.1);
-    --violet:      #7c3aed;
-    --violet-mid:  #6d28d9;
-    --violet-soft: #a78bfa;
-    --violet-dim:  rgba(124,58,237,0.12);
-    --text:        #ede8f8;
-    --text-muted:  #9b90ba;
-    --text-dim:    #584f72;
+    /* ── Fonds ── */
+    --ink:         #0a0800;
+    --deep:        #110e04;
+    --surface:     #181300;
+    --card:        #201800;
+    --card-hover:  #2a2005;
+
+    /* ── Bordures ── */
+    --border:      rgba(255,160,60,0.14);
+    --border-gold: rgba(255,184,0,0.3);
+
+    /* ── Accent principal : Or solaire ── */
+    --gold:        #f5a623;
+    --gold-light:  #ffcc55;
+    --gold-dim:    rgba(245,166,35,0.12);
+
+    /* ── Accent secondaire : Corail / Orange ── */
+    --violet:      #e8520a;
+    --violet-mid:  #d14200;
+    --violet-soft: #ff8c52;
+    --violet-dim:  rgba(232,82,10,0.12);
+
+    /* ── Texte ── */
+    --text:        #fdf3e0;
+    --text-muted:  #c4a97a;
+    --text-dim:    #7a5f3a;
+
+    /* ── États ── */
     --green:       #4ade80;
     --red:         #f87171;
     --amber:       #fbbf24;
@@ -59,7 +70,7 @@
   nav {
     position: sticky; top: 0; z-index: 200;
     height: 68px;
-    background: rgba(8,6,18,0.92);
+    background: rgba(10,8,0,0.94);
     backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center;
@@ -68,7 +79,7 @@
     transition: box-shadow 0.3s;
   }
 
-  nav:hover { box-shadow: 0 4px 40px rgba(124,58,237,0.08); }
+  nav:hover { box-shadow: 0 4px 40px rgba(245,166,35,0.08); }
 
   .nav-logo {
     font-family: 'Cormorant Garamond', serif;
@@ -114,38 +125,38 @@
 
   .btn-outline {
     background: transparent;
-    border: 1px solid rgba(167,139,250,0.35);
+    border: 1px solid rgba(255,140,82,0.32);
     color: var(--violet-soft);
   }
   .btn-outline:hover {
     background: var(--violet); color: white;
     border-color: var(--violet);
-    box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+    box-shadow: 0 4px 20px rgba(232,82,10,0.25);
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--violet) 0%, #9333ea 100%);
+    background: linear-gradient(135deg, var(--violet) 0%, #e8520a 100%);
     color: white;
-    box-shadow: 0 2px 12px rgba(124,58,237,0.25);
+    box-shadow: 0 2px 12px rgba(232,82,10,0.22);
   }
   .btn-primary:hover {
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    color: var(--ink); box-shadow: 0 4px 20px rgba(212,168,67,0.3);
+    color: var(--ink); box-shadow: 0 4px 20px rgba(245,166,35,0.3);
   }
 
   .btn-dark {
     background: var(--violet-dim);
     color: var(--violet-soft);
-    border: 1px solid rgba(124,58,237,0.25);
+    border: 1px solid rgba(232,82,10,0.22);
   }
   .btn-dark:hover { background: var(--violet); color: white; }
 
   .btn-gold {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     color: var(--ink); font-weight: 700;
-    box-shadow: 0 2px 12px rgba(212,168,67,0.25);
+    box-shadow: 0 2px 12px rgba(245,166,35,0.25);
   }
-  .btn-gold:hover { box-shadow: 0 6px 24px rgba(212,168,67,0.4); transform: translateY(-1px); }
+  .btn-gold:hover { box-shadow: 0 6px 24px rgba(245,166,35,0.4); transform: translateY(-1px); }
 
   /* ══ PAGES ═══════════════════════════════════════════ */
   .page { display: none; }
@@ -168,7 +179,7 @@
   }
 
   .hero-left {
-    background: linear-gradient(160deg, #0e0b1a 0%, #160d2e 60%, #0e0b1a 100%);
+    background: linear-gradient(160deg, #110e04 0%, #1e0f00 55%, #0e0900 100%);
     padding: 80px 64px;
     display: flex; flex-direction: column;
     justify-content: center; position: relative; overflow: hidden;
@@ -179,7 +190,7 @@
     content: '';
     position: absolute; top: -150px; right: -80px;
     width: 500px; height: 500px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(232,82,10,0.25) 0%, rgba(245,166,35,0.12) 40%, transparent 70%);
     pointer-events: none;
     animation: orbPulse 6s ease-in-out infinite;
   }
@@ -189,7 +200,7 @@
     position: absolute; bottom: -60px; left: -20px;
     font-family: 'Cormorant Garamond', serif;
     font-size: 18rem; font-weight: 700;
-    color: rgba(212,168,67,0.04);
+    color: rgba(245,166,35,0.05);
     pointer-events: none; line-height: 1; user-select: none;
   }
 
@@ -200,8 +211,8 @@
 
   .hero-tag {
     display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(212,168,67,0.08);
-    border: 1px solid rgba(212,168,67,0.3);
+    background: rgba(245,166,35,0.1);
+    border: 1px solid rgba(245,166,35,0.3);
     padding: 6px 16px; border-radius: 20px;
     font-size: 0.72rem; font-weight: 600;
     letter-spacing: 0.12em; text-transform: uppercase;
@@ -263,23 +274,23 @@
 
   .stat-card::before {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(124,58,237,0.06) 0%, transparent 60%);
+    background: linear-gradient(135deg, rgba(245,166,35,0.06) 0%, transparent 60%);
     opacity: 0; transition: opacity 0.28s;
   }
 
-  .stat-card:hover { transform: translateY(-4px); border-color: rgba(212,168,67,0.3); box-shadow: 0 12px 36px rgba(0,0,0,0.3); }
+  .stat-card:hover { transform: translateY(-4px); border-color: rgba(245,166,35,0.3); box-shadow: 0 12px 36px rgba(0,0,0,0.3); }
   .stat-card:hover::before { opacity: 1; }
 
   .stat-card:first-child {
     grid-column: span 2;
-    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(147,51,234,0.08));
-    border-color: rgba(124,58,237,0.3);
+    background: linear-gradient(135deg, rgba(232,82,10,0.15), rgba(232,82,10,0.1));
+    border-color: rgba(232,82,10,0.25);
     display: flex; align-items: center; gap: 20px;
   }
 
   .stat-icon {
     width: 52px; height: 52px; border-radius: 12px;
-    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25);
+    background: rgba(232,82,10,0.15); border: 1px solid rgba(232,82,10,0.22);
     display: flex; align-items: center; justify-content: center;
     font-size: 1.5rem; flex-shrink: 0;
   }
@@ -312,7 +323,7 @@
     transition: all 0.22s; outline: none;
   }
   .search-input::placeholder { color: var(--text-dim); }
-  .search-input:focus { border-color: var(--violet); background: var(--card-hover); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+  .search-input:focus { border-color: var(--violet); background: var(--card-hover); box-shadow: 0 0 0 3px rgba(232,82,10,0.1); }
 
   .search-icon {
     position: absolute; left: 15px; top: 50%;
@@ -363,7 +374,7 @@
     background: transparent; color: var(--text-muted);
   }
   .category-tag:hover { border-color: var(--violet-soft); color: var(--violet-soft); background: var(--violet-dim); }
-  .category-tag.active { background: var(--violet); color: white; border-color: var(--violet); box-shadow: 0 2px 12px rgba(124,58,237,0.3); }
+  .category-tag.active { background: var(--violet); color: white; border-color: var(--violet); box-shadow: 0 2px 12px rgba(232,82,10,0.25); }
 
   .range-inputs { display: flex; gap: 8px; align-items: center; }
   .range-input {
@@ -377,7 +388,7 @@
   .range-input:focus { border-color: var(--violet); }
 
   /* ══ GRILLE PRODUITS ═════════════════════════════════ */
-  .products-area { padding: 28px 32px; background: #0c0919; }
+  .products-area { padding: 28px 32px; background: #0c0900; }
 
   .products-header {
     display: flex; justify-content: space-between;
@@ -414,12 +425,12 @@
   .product-card:hover {
     transform: translateY(-6px);
     border-color: var(--border-gold);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,168,67,0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(245,166,35,0.12);
   }
 
   .product-img {
     width: 100%; height: 200px;
-    background: linear-gradient(135deg, #1a1430, #221840);
+    background: linear-gradient(135deg, #201800, #201600);
     display: flex; align-items: center;
     justify-content: center; font-size: 4.5rem;
     position: relative; overflow: hidden;
@@ -427,7 +438,7 @@
 
   .product-img::before {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(8,6,18,0.7));
+    background: linear-gradient(to bottom, transparent 50%, rgba(10,8,0,0.75));
   }
 
   .product-img-overlay {
@@ -452,20 +463,20 @@
     letter-spacing: 0.1em; text-transform: uppercase;
     padding: 4px 10px; border-radius: 20px; z-index: 2;
   }
-  .product-badge         { background: rgba(147,51,234,0.85); color: white; backdrop-filter: blur(4px); }
+  .product-badge         { background: rgba(232,82,10,0.9); color: white; backdrop-filter: blur(4px); }
   .product-badge.new     { background: rgba(16,185,129,0.85); color: white; }
-  .product-badge.featured{ background: rgba(212,168,67,0.9); color: var(--ink); }
+  .product-badge.featured{ background: rgba(245,166,35,0.95); color: var(--ink); }
 
   .product-fav {
     position: absolute; top: 10px; right: 10px;
     width: 34px; height: 34px;
-    background: rgba(8,6,18,0.7); backdrop-filter: blur(6px);
+    background: rgba(10,8,0,0.75); backdrop-filter: blur(6px);
     border-radius: 50%; border: 1px solid var(--border);
     cursor: pointer; display: flex; align-items: center;
     justify-content: center; font-size: 0.9rem;
     transition: all 0.2s; z-index: 2;
   }
-  .product-fav:hover { background: rgba(124,58,237,0.3); transform: scale(1.1); }
+  .product-fav:hover { background: rgba(232,82,10,0.25); transform: scale(1.1); }
   .product-fav.liked { color: #f472b6; border-color: rgba(244,114,182,0.4); }
 
   .product-info { padding: 16px 18px 14px; flex: 1; display: flex; flex-direction: column; }
@@ -518,7 +529,7 @@
   .add-cart-btn {
     display: none; width: 100%;
     padding: 10px 14px;
-    background: linear-gradient(135deg, var(--violet), #9333ea);
+    background: linear-gradient(135deg, var(--violet), #e8520a);
     color: white; border: none;
     font-family: 'Outfit', sans-serif;
     font-size: 0.78rem; font-weight: 600;
@@ -578,7 +589,7 @@
   .cat-card:hover {
     transform: translateY(-5px);
     background: var(--card-hover);
-    border-color: rgba(124,58,237,0.3);
+    border-color: rgba(232,82,10,0.25);
     box-shadow: 0 16px 40px rgba(0,0,0,0.3);
   }
   .cat-card:hover::after { transform: scaleX(1); }
@@ -649,7 +660,7 @@
     letter-spacing: 0.03em;
   }
   .modal-tab:hover { color: var(--text-muted); background: var(--card); }
-  .modal-tab.active { background: var(--violet); color: white; box-shadow: 0 2px 10px rgba(124,58,237,0.3); }
+  .modal-tab.active { background: var(--violet); color: white; box-shadow: 0 2px 10px rgba(232,82,10,0.25); }
 
   /* ══ TABLEAU ═════════════════════════════════════════ */
   .section-title {
@@ -672,7 +683,7 @@
   table { width: 100%; border-collapse: collapse; }
 
   thead {
-    background: rgba(124,58,237,0.07);
+    background: rgba(245,166,35,0.07);
     border-bottom: 1px solid var(--border);
   }
 
@@ -690,7 +701,7 @@
   }
 
   tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(124,58,237,0.04); }
+  tr:hover td { background: rgba(245,166,35,0.04); }
 
   .status-badge {
     display: inline-flex; align-items: center; gap: 5px;
@@ -699,8 +710,8 @@
     letter-spacing: 0.05em; text-transform: uppercase;
   }
   .status-delivered  { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
-  .status-processing { background: rgba(212,168,67,0.1); color: var(--gold); border: 1px solid rgba(212,168,67,0.2); }
-  .status-shipped    { background: rgba(167,139,250,0.1); color: var(--violet-soft); border: 1px solid rgba(167,139,250,0.2); }
+  .status-processing { background: rgba(245,166,35,0.12); color: var(--gold); border: 1px solid rgba(212,168,67,0.2); }
+  .status-shipped    { background: rgba(167,139,250,0.1); color: var(--violet-soft); border: 1px solid rgba(255,140,82,0.22); }
   .status-cancelled  { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
   .status-pending    { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
 
@@ -728,16 +739,16 @@
   input:focus, textarea:focus, select:focus {
     border-color: var(--violet);
     background: var(--card);
-    box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    box-shadow: 0 0 0 3px rgba(232,82,10,0.1);
   }
 
   textarea { resize: vertical; min-height: 90px; }
 
   .upload-zone {
-    border: 2px dashed rgba(124,58,237,0.2);
+    border: 2px dashed rgba(232,82,10,0.18);
     border-radius: 10px; padding: 44px 24px;
     text-align: center; cursor: pointer;
-    transition: all 0.2s; background: rgba(124,58,237,0.03);
+    transition: all 0.2s; background: rgba(245,166,35,0.03);
   }
   .upload-zone:hover { border-color: var(--violet); background: var(--violet-dim); }
   .upload-zone .icon { font-size: 2.4rem; margin-bottom: 10px; }
@@ -764,7 +775,7 @@
 
   .cart-item-img {
     width: 88px; height: 88px;
-    background: linear-gradient(135deg, #1a1430, #221840);
+    background: linear-gradient(135deg, #201800, #201600);
     border-radius: 8px;
     display: flex; align-items: center;
     justify-content: center; font-size: 2.4rem; flex-shrink: 0;
@@ -813,8 +824,8 @@
   .cart-remove:hover { opacity: 1; }
 
   .order-summary {
-    background: linear-gradient(160deg, #160d2e 0%, var(--deep) 100%);
-    border: 1px solid rgba(124,58,237,0.25);
+    background: linear-gradient(160deg, #1a1200 0%, var(--deep) 100%);
+    border: 1px solid rgba(232,82,10,0.22);
     border-radius: 12px; padding: 28px;
     position: sticky; top: 88px;
   }
@@ -843,24 +854,24 @@
 
   .checkout-btn {
     width: 100%; padding: 15px;
-    background: linear-gradient(135deg, var(--violet), #9333ea);
+    background: linear-gradient(135deg, var(--violet), #e8520a);
     color: white; border: none; border-radius: 8px;
     font-family: 'Outfit', sans-serif;
     font-size: 0.88rem; font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase;
     cursor: pointer; transition: all 0.25s; margin-top: 8px;
-    box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+    box-shadow: 0 4px 20px rgba(232,82,10,0.25);
   }
   .checkout-btn:hover {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--ink); box-shadow: 0 6px 28px rgba(212,168,67,0.35);
+    color: var(--ink); box-shadow: 0 6px 28px rgba(245,166,35,0.35);
     transform: translateY(-1px);
   }
 
   /* ══ MODAL ═══════════════════════════════════════════ */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
-    background: rgba(8,6,18,0.88);
+    background: rgba(10,8,0,0.92);
     z-index: 500; align-items: center; justify-content: center;
     backdrop-filter: blur(8px);
   }
@@ -868,7 +879,7 @@
 
   .modal {
     background: var(--card);
-    border: 1px solid rgba(124,58,237,0.25);
+    border: 1px solid rgba(232,82,10,0.22);
     border-radius: 14px; padding: 44px;
     max-width: 480px; width: 90%;
     position: relative;
@@ -915,7 +926,7 @@
     cursor: pointer; transition: all 0.2s; color: var(--text);
   }
   .role-card:hover { border-color: var(--violet-soft); background: var(--violet-dim); }
-  .role-card.selected { border-color: var(--violet); background: rgba(124,58,237,0.12); }
+  .role-card.selected { border-color: var(--violet); background: rgba(232,82,10,0.12); }
   .role-card .icon  { font-size: 1.8rem; margin-bottom: 7px; }
   .role-card .title { font-weight: 700; font-size: 0.88rem; margin-bottom: 3px; }
   .role-card .desc  { font-size: 0.73rem; color: var(--text-dim); }
@@ -927,7 +938,7 @@
     border: 1px solid var(--border);
     color: var(--text); padding: 14px 22px;
     border-radius: 8px; font-size: 0.86rem;
-    border-left: 3px solid var(--violet);
+    border-left: 3px solid var(--gold);
     box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     z-index: 9999; transform: translateX(150%);
     transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
@@ -937,7 +948,7 @@
 
   /* ══ PROFIL VENDEUR ══════════════════════════════════ */
   .seller-profile-header {
-    background: linear-gradient(135deg, var(--deep), #160d2e);
+    background: linear-gradient(135deg, var(--deep), #1a1200);
     padding: 56px 48px;
     display: flex; gap: 36px; align-items: center;
     position: relative; overflow: hidden;
@@ -946,7 +957,7 @@
   .seller-profile-header::after {
     content: ''; position: absolute; right: -80px; top: -80px;
     width: 360px; height: 360px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%);
   }
 
   .seller-avatar-lg {
@@ -955,7 +966,7 @@
     display: flex; align-items: center; justify-content: center;
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.4rem; font-weight: 700; color: var(--ink);
-    flex-shrink: 0; border: 3px solid rgba(212,168,67,0.3);
+    flex-shrink: 0; border: 3px solid rgba(245,166,35,0.3);
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
 
@@ -987,7 +998,7 @@
 
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: var(--ink); }
-  ::-webkit-scrollbar-thumb { background: #2d1f4e; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: #2a1c00; border-radius: 3px; }
 
   .price-range { display: flex; flex-direction: column; gap: 10px; }
 
@@ -1011,7 +1022,7 @@
 
     .nav-mobile-menu {
       display: none; position: fixed; top: 58px; left: 0; right: 0;
-      background: rgba(8,6,18,0.97); backdrop-filter: blur(16px);
+      background: rgba(10,8,0,0.97); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       padding: 12px 16px; z-index: 99;
       flex-direction: column; gap: 0;
@@ -1186,30 +1197,30 @@
   </div>
 
   <!-- Featured categories -->
-  <div style="padding:60px 40px; background:#0d0a18; border-top:1px solid rgba(124,58,237,0.15);">
-    <div class="section-title" style="max-width:900px;margin:0 auto 40px;color:#e8e0f5;">Catégories populaires</div>
+  <div style="padding:60px 40px; background:#110e04; border-top:1px solid rgba(232,82,10,0.15);">
+    <div class="section-title" style="max-width:900px;margin:0 auto 40px;color:#fdf3e0;">Catégories populaires</div>
     <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;max-width:900px;margin:0 auto;">
-      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:4px;transition:all 0.2s;color:#e8e0f5;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(124,58,237,0.12)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.2)';this.style.background='#1a1430'">
+      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:4px;transition:all 0.2s;color:#fdf3e0;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(232,82,10,0.12)'" onmouseout="this.style.borderColor='rgba(232,82,10,0.18)';this.style.background='#201800'">
         <div style="font-size:2rem;margin-bottom:8px;">👗</div>
         <div style="font-size:0.78rem;font-weight:600;">Mode</div>
       </div>
-      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:4px;transition:all 0.2s;color:#e8e0f5;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(124,58,237,0.12)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.2)';this.style.background='#1a1430'">
+      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:4px;transition:all 0.2s;color:#fdf3e0;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(232,82,10,0.12)'" onmouseout="this.style.borderColor='rgba(232,82,10,0.18)';this.style.background='#201800'">
         <div style="font-size:2rem;margin-bottom:8px;">💻</div>
         <div style="font-size:0.78rem;font-weight:600;">Tech</div>
       </div>
-      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:4px;transition:all 0.2s;color:#e8e0f5;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(124,58,237,0.12)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.2)';this.style.background='#1a1430'">
+      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:4px;transition:all 0.2s;color:#fdf3e0;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(232,82,10,0.12)'" onmouseout="this.style.borderColor='rgba(232,82,10,0.18)';this.style.background='#201800'">
         <div style="font-size:2rem;margin-bottom:8px;">🏠</div>
         <div style="font-size:0.78rem;font-weight:600;">Maison</div>
       </div>
-      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:4px;transition:all 0.2s;color:#e8e0f5;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(124,58,237,0.12)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.2)';this.style.background='#1a1430'">
+      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:4px;transition:all 0.2s;color:#fdf3e0;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(232,82,10,0.12)'" onmouseout="this.style.borderColor='rgba(232,82,10,0.18)';this.style.background='#201800'">
         <div style="font-size:2rem;margin-bottom:8px;">🎨</div>
         <div style="font-size:0.78rem;font-weight:600;">Art & Déco</div>
       </div>
-      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:4px;transition:all 0.2s;color:#e8e0f5;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(124,58,237,0.12)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.2)';this.style.background='#1a1430'">
+      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:4px;transition:all 0.2s;color:#fdf3e0;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(232,82,10,0.12)'" onmouseout="this.style.borderColor='rgba(232,82,10,0.18)';this.style.background='#201800'">
         <div style="font-size:2rem;margin-bottom:8px;">🌿</div>
         <div style="font-size:0.78rem;font-weight:600;">Bio & Santé</div>
       </div>
-      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:4px;transition:all 0.2s;color:#e8e0f5;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(124,58,237,0.12)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.2)';this.style.background='#1a1430'">
+      <div onclick="showPage('catalogue')" style="cursor:pointer;text-align:center;padding:24px 12px;background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:4px;transition:all 0.2s;color:#fdf3e0;" onmouseover="this.style.borderColor='var(--violet)';this.style.background='rgba(232,82,10,0.12)'" onmouseout="this.style.borderColor='rgba(232,82,10,0.18)';this.style.background='#201800'">
         <div style="font-size:2rem;margin-bottom:8px;">📚</div>
         <div style="font-size:0.78rem;font-weight:600;">Livres</div>
       </div>
@@ -1307,8 +1318,8 @@
   <div class="page-inner">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
       <div>
-        <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:#e8e0f5;">Tableau de bord</h1>
-        <p style="color:#6b5f8a;font-size:0.9rem;margin-top:4px;">Bonjour, <strong style="color:#e8e0f5;">Marie Dupont</strong> ✦ Votre boutique est active</p>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:900;color:#fdf3e0;">Tableau de bord</h1>
+        <p style="color:#7a5f3a;font-size:0.9rem;margin-top:4px;">Bonjour, <strong style="color:#fdf3e0;">The Code</strong> ✦ Votre boutique est active</p>
       </div>
       <button class="btn btn-primary" onclick="showAddProduct()">+ Ajouter un produit</button>
     </div>
@@ -1441,11 +1452,11 @@
   <div class="page-inner" style="padding:32px 40px;max-width:800px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:40px;">
       <div style="font-size:3rem;margin-bottom:12px;">📦</div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#e8e0f5;margin-bottom:8px;">Suivi de commande</h1>
-      <p style="color:#6b5f8a;font-size:0.9rem;margin-bottom:24px;">Entrez votre numéro de suivi ou de commande</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:#fdf3e0;margin-bottom:8px;">Suivi de commande</h1>
+      <p style="color:#7a5f3a;font-size:0.9rem;margin-bottom:24px;">Entrez votre numéro de suivi ou de commande</p>
       <div style="display:flex;gap:8px;max-width:480px;margin:0 auto;">
         <input type="text" id="track-input" placeholder="N° de suivi ou N° de commande"
-               style="flex:1;background:#1a1430;border:1px solid rgba(124,58,237,0.3);color:#e8e0f5;
+               style="flex:1;background:#201800;border:1px solid rgba(232,82,10,0.25);color:#fdf3e0;
                       padding:12px 16px;border-radius:4px;font-size:0.9rem;outline:none;">
         <button onclick="trackOrder()"
                 style="background:var(--violet);color:white;border:none;padding:12px 20px;
@@ -1456,7 +1467,7 @@
     </div>
     <div id="tracking-result"></div>
     <div id="my-orders-section" style="display:none;margin-top:32px;">
-      <h2 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#e8e0f5;margin-bottom:16px;">📋 Mes commandes</h2>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fdf3e0;margin-bottom:16px;">📋 Mes commandes</h2>
       <div id="my-orders-list"></div>
     </div>
   </div>
@@ -1467,37 +1478,37 @@
   <div class="page-inner" style="padding:32px 40px;max-width:1200px;margin:0 auto;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
       <div>
-        <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#e8e0f5;">
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:900;color:#fdf3e0;">
           ⚙️ Dashboard <span style="color:var(--gold);font-style:italic;">Admin</span>
         </h1>
-        <p style="color:#6b5f8a;font-size:0.85rem;margin-top:4px;">Gestion complète de la plateforme NexaShop</p>
+        <p style="color:#7a5f3a;font-size:0.85rem;margin-top:4px;">Gestion complète de la plateforme NexaShop</p>
       </div>
-      <button onclick="loadAdmin()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;padding:8px 18px;border-radius:4px;cursor:pointer;font-size:0.82rem;">
+      <button onclick="loadAdmin()" style="background:rgba(232,82,10,0.15);border:1px solid rgba(232,82,10,0.25);color:#ff8c52;padding:8px 18px;border-radius:4px;cursor:pointer;font-size:0.82rem;">
         🔄 Actualiser
       </button>
     </div>
     <div id="admin-kpis" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
         <div style="font-size:2rem;margin-bottom:4px;">⏳</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;">Chargement...</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;">Chargement...</div>
       </div>
     </div>
-    <div style="display:flex;gap:4px;margin-bottom:24px;background:#1a1430;border-radius:6px;padding:4px;width:fit-content;">
+    <div style="display:flex;gap:4px;margin-bottom:24px;background:#201800;border-radius:6px;padding:4px;width:fit-content;">
       <button onclick="adminTab('vendors')" id="atab-vendors" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:var(--violet);color:white;">🏪 Vendeurs</button>
-      <button onclick="adminTab('orders')" id="atab-orders" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">📦 Commandes</button>
-      <button onclick="adminTab('users')" id="atab-users" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">👥 Utilisateurs</button>
-      <button onclick="adminTab('products')" id="atab-products" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">🛍️ Produits</button>
+      <button onclick="adminTab('orders')" id="atab-orders" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#7a5f3a;">📦 Commandes</button>
+      <button onclick="adminTab('users')" id="atab-users" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#7a5f3a;">👥 Utilisateurs</button>
+      <button onclick="adminTab('products')" id="atab-products" style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#7a5f3a;">🛍️ Produits</button>
     </div>
     <div id="admin-content">
-      <div style="text-align:center;padding:60px;color:#6b5f8a;">Chargement...</div>
+      <div style="text-align:center;padding:60px;color:#7a5f3a;">Chargement...</div>
     </div>
   </div>
 </div>
 
 
   <div class="page-inner" style="padding-bottom:0;">
-    <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;margin-bottom:8px;color:#e8e0f5;">Votre Panier</h1>
-    <p style="color:#6b5f8a;font-size:0.9rem;margin-bottom:0;" id="cart-subtitle">3 articles de 2 vendeurs</p>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:900;margin-bottom:8px;color:#fdf3e0;">Votre Panier</h1>
+    <p style="color:#7a5f3a;font-size:0.9rem;margin-bottom:0;" id="cart-subtitle">3 articles de 2 vendeurs</p>
   </div>
   <div class="cart-layout">
     <div class="cart-items" id="cart-items-list"></div>
@@ -1506,7 +1517,7 @@
       <div class="summary-row"><span>Sous-total</span><span id="subtotal">-</span></div>
       <div class="summary-total"><span>Total</span><span id="total-price">-</span></div>
       <button class="checkout-btn" onclick="checkout()">📱 Payer avec Wave</button>
-      <p style="text-align:center;font-size:0.75rem;color:#6b5f8a;margin-top:12px;">🔒 Paiement 100% sécurisé</p>
+      <p style="text-align:center;font-size:0.75rem;color:#7a5f3a;margin-top:12px;">🔒 Paiement 100% sécurisé</p>
     </div>
   </div>
 </div>
@@ -1559,7 +1570,7 @@
         <input type="email" id="reg-email" placeholder="votre@email.com">
       </div>
       <div class="form-group">
-        <label>Numéro de téléphone <span style="color:#6b5f8a;font-size:0.78rem;">(pour recevoir les SMS)</span></label>
+        <label>Numéro de téléphone <span style="color:#7a5f3a;font-size:0.78rem;">(pour recevoir les SMS)</span></label>
         <input type="tel" id="reg-phone" placeholder="+2250700000000">
       </div>
       <div class="form-group">
@@ -1649,7 +1660,7 @@
   // ══ LIVRAISON & SUIVI ════════════════════════════════
 
   const DELIVERY_STATUS_INFO = {
-    preparing:        { emoji:'📦', label:'Préparé / Emballé',      color:'#a78bfa' },
+    preparing:        { emoji:'📦', label:'Préparé / Emballé',      color:'#ff8c52' },
     handed_over:      { emoji:'🚛', label:'Remis au transporteur',  color:'#60a5fa' },
     in_transit:       { emoji:'🔄', label:'En transit',             color:'#f59e0b' },
     out_for_delivery: { emoji:'🛵', label:'En cours de livraison',  color:'#f59e0b' },
@@ -1669,23 +1680,23 @@
     try {
       const orders = await api('GET', '/orders');
       if (!orders.length) {
-        list.innerHTML = '<p style="color:#6b5f8a;text-align:center;">Aucune commande</p>';
+        list.innerHTML = '<p style="color:#7a5f3a;text-align:center;">Aucune commande</p>';
         return;
       }
       list.innerHTML = orders.map(o => `
-        <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;
+        <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;
                     padding:16px 20px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;"
              onclick="trackByOrderId(${o.id})">
           <div>
-            <div style="font-weight:600;color:#e8e0f5;">Commande #${o.id}</div>
-            <div style="font-size:0.8rem;color:#6b5f8a;">${new Date(o.created_at).toLocaleDateString('fr-FR')}</div>
+            <div style="font-weight:600;color:#fdf3e0;">Commande #${o.id}</div>
+            <div style="font-size:0.8rem;color:#7a5f3a;">${new Date(o.created_at).toLocaleDateString('fr-FR')}</div>
           </div>
           <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'DM Mono',monospace;color:#d4a843;">${formatCFA(o.total_amount)}</span>
-            <span style="background:rgba(124,58,237,0.15);color:#a78bfa;padding:3px 10px;border-radius:2px;font-size:0.75rem;">
+            <span style="font-family:'DM Mono',monospace;color:#f5a623;">${formatCFA(o.total_amount)}</span>
+            <span style="background:rgba(232,82,10,0.15);color:#ff8c52;padding:3px 10px;border-radius:2px;font-size:0.75rem;">
               ${o.status}
             </span>
-            <span style="color:#6b5f8a;">›</span>
+            <span style="color:#7a5f3a;">›</span>
           </div>
         </div>
       `).join('');
@@ -1701,7 +1712,7 @@
     const input   = document.getElementById('track-input').value.trim();
     const result  = document.getElementById('tracking-result');
     if (!input) return;
-    result.innerHTML = '<div style="text-align:center;padding:20px;color:#6b5f8a;">Recherche...</div>';
+    result.innerHTML = '<div style="text-align:center;padding:20px;color:#7a5f3a;">Recherche...</div>';
     try {
       let data;
       // Si numéro numérique → recherche par order_id
@@ -1714,47 +1725,47 @@
       renderTrackingResult(data.delivery, data.events);
     } catch(e) {
       result.innerHTML = `
-        <div style="text-align:center;padding:32px;background:#1a1430;border:1px solid rgba(248,113,113,0.2);border-radius:6px;">
+        <div style="text-align:center;padding:32px;background:#201800;border:1px solid rgba(248,113,113,0.2);border-radius:6px;">
           <div style="font-size:2rem;margin-bottom:8px;">😕</div>
           <p style="color:#f87171;">Aucun suivi trouvé pour "${input}"</p>
-          <p style="color:#6b5f8a;font-size:0.82rem;margin-top:4px;">Vérifiez votre numéro ou contactez le vendeur</p>
+          <p style="color:#7a5f3a;font-size:0.82rem;margin-top:4px;">Vérifiez votre numéro ou contactez le vendeur</p>
         </div>`;
     }
   }
 
   function renderTrackingResult(delivery, events) {
     const result   = document.getElementById('tracking-result');
-    const info     = DELIVERY_STATUS_INFO[delivery.status] || { emoji:'📦', label:delivery.status, color:'#a78bfa' };
+    const info     = DELIVERY_STATUS_INFO[delivery.status] || { emoji:'📦', label:delivery.status, color:'#ff8c52' };
     const isPickup = delivery.delivery_type === 'pickup';
 
     const timeline = events.map((ev, i) => {
-      const evInfo  = DELIVERY_STATUS_INFO[ev.status] || { emoji:'📌', label:ev.status, color:'#a78bfa' };
+      const evInfo  = DELIVERY_STATUS_INFO[ev.status] || { emoji:'📌', label:ev.status, color:'#ff8c52' };
       const isLast  = i === events.length - 1;
       return `
         <div style="display:flex;gap:16px;margin-bottom:${isLast ? 0 : 20}px;">
           <div style="display:flex;flex-direction:column;align-items:center;">
-            <div style="width:36px;height:36px;border-radius:50%;background:${isLast ? evInfo.color : 'rgba(124,58,237,0.2)'};
+            <div style="width:36px;height:36px;border-radius:50%;background:${isLast ? evInfo.color : 'rgba(232,82,10,0.18)'};
                         display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">
               ${evInfo.emoji}
             </div>
-            ${!isLast ? `<div style="width:2px;flex:1;background:rgba(124,58,237,0.15);margin:4px 0;min-height:20px;"></div>` : ''}
+            ${!isLast ? `<div style="width:2px;flex:1;background:rgba(232,82,10,0.15);margin:4px 0;min-height:20px;"></div>` : ''}
           </div>
           <div style="padding-top:6px;">
-            <div style="font-weight:600;color:${isLast ? evInfo.color : '#e8e0f5'};font-size:0.9rem;">${evInfo.label}</div>
-            <div style="color:#a99cc5;font-size:0.82rem;margin-top:2px;">${ev.description || ''}</div>
-            ${ev.location ? `<div style="color:#6b5f8a;font-size:0.78rem;margin-top:2px;">📍 ${ev.location}</div>` : ''}
-            <div style="color:#6b5f8a;font-size:0.75rem;margin-top:4px;">${new Date(ev.created_at).toLocaleString('fr-FR')}</div>
+            <div style="font-weight:600;color:${isLast ? evInfo.color : '#fdf3e0'};font-size:0.9rem;">${evInfo.label}</div>
+            <div style="color:#c4a97a;font-size:0.82rem;margin-top:2px;">${ev.description || ''}</div>
+            ${ev.location ? `<div style="color:#7a5f3a;font-size:0.78rem;margin-top:2px;">📍 ${ev.location}</div>` : ''}
+            <div style="color:#7a5f3a;font-size:0.75rem;margin-top:4px;">${new Date(ev.created_at).toLocaleString('fr-FR')}</div>
           </div>
         </div>`;
     }).join('');
 
     result.innerHTML = `
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:8px;overflow:hidden;">
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:8px;overflow:hidden;">
         <!-- Header statut -->
-        <div style="background:rgba(124,58,237,0.1);padding:20px 24px;border-bottom:1px solid rgba(124,58,237,0.15);">
+        <div style="background:rgba(232,82,10,0.1);padding:20px 24px;border-bottom:1px solid rgba(232,82,10,0.15);">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
             <div>
-              <div style="font-size:0.78rem;color:#6b5f8a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">
+              <div style="font-size:0.78rem;color:#7a5f3a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">
                 Commande #${delivery.order_id}
               </div>
               <div style="display:flex;align-items:center;gap:8px;">
@@ -1763,43 +1774,43 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:0.78rem;color:#6b5f8a;">Type</div>
-              <div style="color:#e8e0f5;font-weight:600;">${isPickup ? '🏪 Retrait en boutique' : '🚚 Livraison à domicile'}</div>
+              <div style="font-size:0.78rem;color:#7a5f3a;">Type</div>
+              <div style="color:#fdf3e0;font-weight:600;">${isPickup ? '🏪 Retrait en boutique' : '🚚 Livraison à domicile'}</div>
             </div>
           </div>
         </div>
 
         <!-- Infos livraison -->
-        <div style="padding:20px 24px;border-bottom:1px solid rgba(124,58,237,0.1);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
+        <div style="padding:20px 24px;border-bottom:1px solid rgba(232,82,10,0.1);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
           ${delivery.tracking_number ? `
             <div>
-              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Numéro de suivi</div>
-              <div style="font-family:'DM Mono',monospace;color:#a78bfa;font-size:0.88rem;">${delivery.tracking_number}</div>
-              ${delivery.carrier_url ? `<a href="${delivery.carrier_url}" target="_blank" style="font-size:0.75rem;color:#d4a843;text-decoration:none;">Suivre sur ${delivery.carrier || 'le site'} →</a>` : ''}
+              <div style="font-size:0.75rem;color:#7a5f3a;margin-bottom:4px;">Numéro de suivi</div>
+              <div style="font-family:'DM Mono',monospace;color:#ff8c52;font-size:0.88rem;">${delivery.tracking_number}</div>
+              ${delivery.carrier_url ? `<a href="${delivery.carrier_url}" target="_blank" style="font-size:0.75rem;color:#f5a623;text-decoration:none;">Suivre sur ${delivery.carrier || 'le site'} →</a>` : ''}
             </div>` : ''}
           ${delivery.carrier ? `
             <div>
-              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Transporteur</div>
-              <div style="color:#e8e0f5;">${delivery.carrier}</div>
+              <div style="font-size:0.75rem;color:#7a5f3a;margin-bottom:4px;">Transporteur</div>
+              <div style="color:#fdf3e0;">${delivery.carrier}</div>
             </div>` : ''}
           ${delivery.estimated_date ? `
             <div>
-              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Livraison estimée</div>
-              <div style="color:#e8e0f5;">${new Date(delivery.estimated_date).toLocaleDateString('fr-FR')}</div>
+              <div style="font-size:0.75rem;color:#7a5f3a;margin-bottom:4px;">Livraison estimée</div>
+              <div style="color:#fdf3e0;">${new Date(delivery.estimated_date).toLocaleDateString('fr-FR')}</div>
             </div>` : ''}
           ${delivery.delivered_at ? `
             <div>
-              <div style="font-size:0.75rem;color:#6b5f8a;margin-bottom:4px;">Livré le</div>
+              <div style="font-size:0.75rem;color:#7a5f3a;margin-bottom:4px;">Livré le</div>
               <div style="color:#4ade80;font-weight:600;">${new Date(delivery.delivered_at).toLocaleString('fr-FR')}</div>
             </div>` : ''}
         </div>
 
         <!-- Timeline -->
         <div style="padding:24px;">
-          <div style="font-size:0.8rem;font-weight:600;color:#6b5f8a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:20px;">
+          <div style="font-size:0.8rem;font-weight:600;color:#7a5f3a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:20px;">
             Historique
           </div>
-          ${timeline || '<p style="color:#6b5f8a;font-size:0.85rem;">Aucun événement</p>'}
+          ${timeline || '<p style="color:#7a5f3a;font-size:0.85rem;">Aucun événement</p>'}
         </div>
       </div>
     `;
@@ -1823,33 +1834,33 @@
 
     const form = document.createElement('div');
     form.id = `delivery-form-${orderId}`;
-    form.style.cssText = 'background:#0d0a18;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;margin-top:10px;';
+    form.style.cssText = 'background:#110e04;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;margin-top:10px;';
     form.innerHTML = `
-      <h4 style="color:#e8e0f5;font-size:0.9rem;font-weight:600;margin-bottom:16px;">🚚 Créer le suivi — Commande #${orderId}</h4>
+      <h4 style="color:#fdf3e0;font-size:0.9rem;font-weight:600;margin-bottom:16px;">🚚 Créer le suivi — Commande #${orderId}</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div>
-          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Type de livraison</label>
-          <select id="dtype-${orderId}" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+          <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Type de livraison</label>
+          <select id="dtype-${orderId}" style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
             <option value="delivery">🚚 Livraison à domicile</option>
             <option value="pickup">🏪 Retrait en boutique</option>
           </select>
         </div>
         <div>
-          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Date estimée</label>
-          <input type="date" id="destdate-${orderId}" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+          <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Date estimée</label>
+          <input type="date" id="destdate-${orderId}" style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
         </div>
         <div>
-          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Transporteur</label>
-          <input type="text" id="dcarrier-${orderId}" placeholder="Ex: DHL, Yango..." style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+          <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Transporteur</label>
+          <input type="text" id="dcarrier-${orderId}" placeholder="Ex: DHL, Yango..." style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
         </div>
         <div>
-          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Numéro de suivi</label>
-          <input type="text" id="dtracking-${orderId}" placeholder="Ex: NEXA-2026-001" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+          <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Numéro de suivi</label>
+          <input type="text" id="dtracking-${orderId}" placeholder="Ex: NEXA-2026-001" style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
         </div>
       </div>
       <div style="margin-bottom:12px;">
-        <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Note (optionnel)</label>
-        <input type="text" id="dnotes-${orderId}" placeholder="Instructions de livraison..." style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+        <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Note (optionnel)</label>
+        <input type="text" id="dnotes-${orderId}" placeholder="Instructions de livraison..." style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
       </div>
       <div style="display:flex;gap:8px;">
         <button onclick="createDelivery(${orderId})"
@@ -1857,7 +1868,7 @@
           ✅ Créer le suivi
         </button>
         <button onclick="document.getElementById('delivery-form-${orderId}').remove()"
-                style="padding:10px 16px;background:transparent;border:1px solid rgba(124,58,237,0.2);color:#6b5f8a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
+                style="padding:10px 16px;background:transparent;border:1px solid rgba(232,82,10,0.18);color:#7a5f3a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
           Annuler
         </button>
       </div>
@@ -1889,13 +1900,13 @@
 
     const form = document.createElement('div');
     form.id = `status-form-${deliveryId}`;
-    form.style.cssText = 'background:#0d0a18;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;margin-top:10px;';
+    form.style.cssText = 'background:#110e04;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;margin-top:10px;';
     form.innerHTML = `
-      <h4 style="color:#e8e0f5;font-size:0.9rem;font-weight:600;margin-bottom:16px;">🔄 Mettre à jour le statut</h4>
+      <h4 style="color:#fdf3e0;font-size:0.9rem;font-weight:600;margin-bottom:16px;">🔄 Mettre à jour le statut</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div>
-          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Nouveau statut</label>
-          <select id="ustatus-${deliveryId}" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+          <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Nouveau statut</label>
+          <select id="ustatus-${deliveryId}" style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
             <option value="preparing">📦 Préparé / Emballé</option>
             <option value="handed_over">🚛 Remis au transporteur</option>
             <option value="in_transit">🔄 En transit</option>
@@ -1905,13 +1916,13 @@
           </select>
         </div>
         <div>
-          <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Localisation</label>
-          <input type="text" id="ulocation-${deliveryId}" placeholder="Ex: Abidjan, Cocody" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+          <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Localisation</label>
+          <input type="text" id="ulocation-${deliveryId}" placeholder="Ex: Abidjan, Cocody" style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
         </div>
       </div>
       <div style="margin-bottom:12px;">
-        <label style="font-size:0.75rem;color:#6b5f8a;display:block;margin-bottom:4px;">Message pour le client</label>
-        <input type="text" id="unotes-${deliveryId}" placeholder="Ex: Colis en cours de livraison, sera livré cet après-midi" style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#e8e0f5;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
+        <label style="font-size:0.75rem;color:#7a5f3a;display:block;margin-bottom:4px;">Message pour le client</label>
+        <input type="text" id="unotes-${deliveryId}" placeholder="Ex: Colis en cours de livraison, sera livré cet après-midi" style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);color:#fdf3e0;padding:8px 12px;border-radius:4px;font-size:0.85rem;">
       </div>
       <div style="display:flex;gap:8px;">
         <button onclick="updateDeliveryStatus(${deliveryId}, ${orderId})"
@@ -1919,7 +1930,7 @@
           ✅ Mettre à jour
         </button>
         <button onclick="document.getElementById('status-form-${deliveryId}').remove()"
-                style="padding:10px 16px;background:transparent;border:1px solid rgba(124,58,237,0.2);color:#6b5f8a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
+                style="padding:10px 16px;background:transparent;border:1px solid rgba(232,82,10,0.18);color:#7a5f3a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
           Annuler
         </button>
       </div>
@@ -1968,7 +1979,7 @@
     const grid = document.getElementById('products-grid');
     document.getElementById('product-count').textContent = total ?? list.length;
     if (!list.length) {
-      grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:60px;color:#6b5f8a;">
+      grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:60px;color:#7a5f3a;">
         <div style="font-size:3rem;margin-bottom:12px;">🔍</div>
         <p>Aucun produit trouvé</p></div>`;
       return;
@@ -2148,19 +2159,19 @@
     if (old) old.remove();
 
     const linksHtml = res.wave_links.map(link => `
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.25);border-radius:6px;padding:18px;margin-bottom:12px;">
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.22);border-radius:6px;padding:18px;margin-bottom:12px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
           <div>
-            <div style="font-weight:600;color:#e8e0f5;">${link.shop_name}</div>
-            <div style="font-size:0.8rem;color:#6b5f8a;">${link.items_count} article(s)</div>
+            <div style="font-weight:600;color:#fdf3e0;">${link.shop_name}</div>
+            <div style="font-size:0.8rem;color:#7a5f3a;">${link.items_count} article(s)</div>
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:1.1rem;color:#d4a843;font-weight:700;">
+          <div style="font-family:'DM Mono',monospace;font-size:1.1rem;color:#f5a623;font-weight:700;">
             ${Math.round(link.amount).toLocaleString('fr-FR')} FCFA
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;background:#0d0a18;padding:10px 14px;border-radius:4px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;background:#110e04;padding:10px 14px;border-radius:4px;">
           <span style="font-size:1.2rem;">📱</span>
-          <span style="font-family:'DM Mono',monospace;font-size:0.9rem;color:#a78bfa;">${link.wave_number}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:0.9rem;color:#ff8c52;">${link.wave_number}</span>
         </div>
         <a href="${link.wave_url}" target="_blank"
            style="display:block;text-align:center;background:linear-gradient(135deg,#1eb8ff,#0d9ed4);color:white;padding:12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:0.9rem;letter-spacing:0.03em;">
@@ -2176,44 +2187,44 @@
       display:flex;align-items:center;justify-content:center;padding:20px;
     `;
     modal.innerHTML = `
-      <div style="background:#0d0a18;border:1px solid rgba(124,58,237,0.4);border-radius:8px;
+      <div style="background:#110e04;border:1px solid rgba(232,82,10,0.38);border-radius:8px;
                   padding:32px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;">
         <div style="text-align:center;margin-bottom:24px;">
           <div style="font-size:2.5rem;margin-bottom:8px;">📱</div>
-          <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:#e8e0f5;margin-bottom:6px;">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#fdf3e0;margin-bottom:6px;">
             Paiement Wave
           </h2>
-          <p style="color:#6b5f8a;font-size:0.85rem;">Commande #${res.order_id}</p>
+          <p style="color:#7a5f3a;font-size:0.85rem;">Commande #${res.order_id}</p>
         </div>
 
-        <div style="background:#1a1430;border-radius:6px;padding:14px 18px;margin-bottom:20px;
+        <div style="background:#201800;border-radius:6px;padding:14px 18px;margin-bottom:20px;
                     display:flex;justify-content:space-between;align-items:center;">
-          <span style="color:#a99cc5;font-size:0.88rem;">Total à payer</span>
-          <span style="font-family:'DM Mono',monospace;font-size:1.2rem;color:#d4a843;font-weight:700;">
+          <span style="color:#c4a97a;font-size:0.88rem;">Total à payer</span>
+          <span style="font-family:'DM Mono',monospace;font-size:1.2rem;color:#f5a623;font-weight:700;">
             ${res.total.toLocaleString('fr-FR')} FCFA
           </span>
         </div>
 
         <div style="margin-bottom:20px;">
-          <p style="color:#a99cc5;font-size:0.82rem;margin-bottom:12px;text-align:center;">
+          <p style="color:#c4a97a;font-size:0.82rem;margin-bottom:12px;text-align:center;">
             Cliquez sur le bouton Wave de chaque boutique pour effectuer le paiement
           </p>
           ${linksHtml}
         </div>
 
-        <div style="background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);
+        <div style="background:rgba(245,166,35,0.1);border:1px solid rgba(212,168,67,0.2);
                     border-radius:4px;padding:12px 16px;margin-bottom:20px;font-size:0.82rem;color:#c8a84b;">
           ⚠️ Après avoir payé via Wave, cliquez sur "Confirmer le paiement" ci-dessous.
         </div>
 
         <div style="display:flex;gap:10px;">
           <button onclick="closeWaveModal()" 
-                  style="flex:1;padding:12px;background:transparent;border:1px solid rgba(124,58,237,0.3);
-                         color:#6b5f8a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
+                  style="flex:1;padding:12px;background:transparent;border:1px solid rgba(232,82,10,0.25);
+                         color:#7a5f3a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
             Annuler
           </button>
           <button onclick="confirmWavePayment(${res.order_id})"
-                  style="flex:2;padding:12px;background:linear-gradient(135deg,#7c3aed,#9333ea);
+                  style="flex:2;padding:12px;background:linear-gradient(135deg,#e8520a,#e8520a);
                          color:white;border:none;border-radius:4px;cursor:pointer;
                          font-weight:600;font-size:0.9rem;">
             ✅ J'ai payé — Confirmer
@@ -2262,7 +2273,7 @@
           <div class="icon">🔒</div>
           <h3>Espace vendeur</h3>
           <p>Connectez-vous avec un compte vendeur pour accéder au dashboard</p>
-          <p style="color:#a99cc5;font-size:0.85rem;margin-top:8px;">Compte démo : marie@nexashop.fr / mdp123</p>
+          <p style="color:#c4a97a;font-size:0.85rem;margin-top:8px;">Compte démo : marie@nexashop.fr / mdp123</p>
           <button class="btn btn-primary" style="padding:12px 32px;margin-top:16px;" onclick="openModal()">Se connecter</button>
         </div>`;
       return;
@@ -2286,8 +2297,8 @@
     <div class="page-inner">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
         <div>
-          <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:#e8e0f5;">Tableau de bord</h1>
-          <p id="dash-welcome" style="color:#6b5f8a;font-size:0.9rem;margin-top:4px;">Chargement…</p>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:900;color:#fdf3e0;">Tableau de bord</h1>
+          <p id="dash-welcome" style="color:#7a5f3a;font-size:0.9rem;margin-top:4px;">Chargement…</p>
         </div>
         <button class="btn btn-primary" onclick="showAddProduct()">+ Ajouter un produit</button>
       </div>
@@ -2297,7 +2308,7 @@
         <button class="modal-tab" id="tab-products" onclick="switchDashTab('products');loadDashProducts()">🛍️ Mes produits</button>
         <button class="modal-tab" id="tab-add" onclick="switchDashTab('add')">✦ Nouveau produit</button>
       </div>
-      <div id="dash-orders"><div class="table-wrap"><table><thead><tr><th>Commande</th><th>Client</th><th>Produits</th><th>Montant</th><th>Date</th><th>Statut</th></tr></thead><tbody id="orders-body"><tr><td colspan="6" style="text-align:center;color:#6b5f8a;padding:32px;">Chargement…</td></tr></tbody></table></div></div>
+      <div id="dash-orders"><div class="table-wrap"><table><thead><tr><th>Commande</th><th>Client</th><th>Produits</th><th>Montant</th><th>Date</th><th>Statut</th></tr></thead><tbody id="orders-body"><tr><td colspan="6" style="text-align:center;color:#7a5f3a;padding:32px;">Chargement…</td></tr></tbody></table></div></div>
       <div id="dash-products" style="display:none;"><div class="products-grid" id="seller-products-grid" style="grid-template-columns:repeat(4,1fr);"></div></div>
       <div id="dash-add" style="display:none;">
         <div style="max-width:700px;">
@@ -2373,11 +2384,11 @@
           <td>${o.buyer_name || '—'}</td>
           <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product_names || '—'}</td>
           <td style="font-family:'DM Mono',monospace;font-weight:600;">${formatCFA(o.subtotal||o.total_amount||0)}</td>
-          <td style="color:#6b5f8a;">${o.created_at?.slice(0,10) || '—'}</td>
+          <td style="color:#7a5f3a;">${o.created_at?.slice(0,10) || '—'}</td>
           <td><span class="status-badge status-${o.status}">${labels[o.status] || o.status}</span></td>
           <td id="delivery-cell-${o.id}">
             <button onclick="loadOrderDelivery(${o.id})" id="delivery-btn-${o.id}"
-                    style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;
+                    style="background:rgba(232,82,10,0.15);border:1px solid rgba(232,82,10,0.25);color:#ff8c52;
                            padding:5px 10px;border-radius:3px;cursor:pointer;font-size:0.75rem;white-space:nowrap;">
               📦 Suivi
             </button>
@@ -2386,7 +2397,7 @@
         <tr id="delivery-detail-${o.id}" style="display:none;">
           <td colspan="7" style="padding:0 16px 12px;"></td>
         </tr>`).join('')
-      : '<tr><td colspan="7" style="text-align:center;color:#6b5f8a;padding:32px;">Aucune commande</td></tr>';
+      : '<tr><td colspan="7" style="text-align:center;color:#7a5f3a;padding:32px;">Aucune commande</td></tr>';
   }
 
   async function loadOrderDelivery(orderId) {
@@ -2400,24 +2411,24 @@
       return;
     }
     detailRow.style.display = 'table-row';
-    cell.innerHTML = '<div style="padding:12px;color:#6b5f8a;font-size:0.85rem;">Chargement...</div>';
+    cell.innerHTML = '<div style="padding:12px;color:#7a5f3a;font-size:0.85rem;">Chargement...</div>';
 
     try {
       const data = await api('GET', `/orders/${orderId}/delivery`);
       const d    = data.delivery;
-      const info = DELIVERY_STATUS_INFO[d.status] || { emoji:'📦', label:d.status, color:'#a78bfa' };
+      const info = DELIVERY_STATUS_INFO[d.status] || { emoji:'📦', label:d.status, color:'#ff8c52' };
       const events = data.events || [];
 
       cell.innerHTML = `
-        <div style="background:#0d0a18;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:16px;">
+        <div style="background:#110e04;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-size:1.2rem;">${info.emoji}</span>
               <span style="font-weight:600;color:${info.color};">${info.label}</span>
-              ${d.tracking_number ? `<span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:#6b5f8a;">— ${d.tracking_number}</span>` : ''}
+              ${d.tracking_number ? `<span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:#7a5f3a;">— ${d.tracking_number}</span>` : ''}
             </div>
             <button onclick="renderUpdateStatusForm(${d.id}, ${orderId})"
-                    style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;
+                    style="background:rgba(232,82,10,0.18);border:1px solid rgba(232,82,10,0.25);color:#ff8c52;
                            padding:6px 14px;border-radius:3px;cursor:pointer;font-size:0.78rem;">
               ✏️ Changer statut
             </button>
@@ -2429,11 +2440,11 @@
               const done   = events.some(ev => ev.status === s);
               const active = d.status === s;
               return `<div style="flex:1;min-width:60px;text-align:center;padding:6px 4px;border-radius:4px;
-                               background:${active ? si.color+'22' : done ? 'rgba(74,222,128,0.08)' : 'rgba(124,58,237,0.05)'};
-                               border:1px solid ${active ? si.color+'44' : done ? 'rgba(74,222,128,0.15)' : 'rgba(124,58,237,0.1)'};
+                               background:${active ? si.color+'22' : done ? 'rgba(74,222,128,0.08)' : 'rgba(245,166,35,0.05)'};
+                               border:1px solid ${active ? si.color+'44' : done ? 'rgba(74,222,128,0.15)' : 'rgba(232,82,10,0.1)'};
                                opacity:${done || active ? 1 : 0.4};">
                         <div style="font-size:1rem;">${si.emoji}</div>
-                        <div style="font-size:0.65rem;color:${active ? si.color : done ? '#4ade80' : '#6b5f8a'};margin-top:2px;">${si.label.split('/')[0].trim()}</div>
+                        <div style="font-size:0.65rem;color:${active ? si.color : done ? '#4ade80' : '#7a5f3a'};margin-top:2px;">${si.label.split('/')[0].trim()}</div>
                       </div>`;
             }).join('')}
           </div>
@@ -2441,8 +2452,8 @@
     } catch(e) {
       // Pas encore de livraison créée
       cell.innerHTML = `
-        <div style="background:#0d0a18;border:1px solid rgba(124,58,237,0.15);border-radius:6px;padding:16px;text-align:center;">
-          <p style="color:#6b5f8a;font-size:0.85rem;margin-bottom:12px;">Aucun suivi créé pour cette commande</p>
+        <div style="background:#110e04;border:1px solid rgba(232,82,10,0.15);border-radius:6px;padding:16px;text-align:center;">
+          <p style="color:#7a5f3a;font-size:0.85rem;margin-bottom:12px;">Aucun suivi créé pour cette commande</p>
           <button onclick="renderDeliveryForm(${orderId})"
                   style="background:var(--violet);color:white;border:none;padding:8px 20px;border-radius:4px;cursor:pointer;font-size:0.85rem;font-weight:600;">
             🚚 Créer le suivi
@@ -2453,13 +2464,13 @@
 
   function updateDashHeader(shop, kpi) {
     const el = document.getElementById('dash-welcome');
-    if (el) el.innerHTML = `Boutique : <strong style="color:#e8e0f5;">${shop?.name || currentUser?.name}</strong> ✦ ${kpi.active_products} produits actifs`;
+    if (el) el.innerHTML = `Boutique : <strong style="color:#fdf3e0;">${shop?.name || currentUser?.name}</strong> ✦ ${kpi.active_products} produits actifs`;
   }
 
   async function loadDashProducts() {
     const grid = document.getElementById('seller-products-grid');
     if (!grid) return;
-    grid.innerHTML = `<div style="grid-column:span 4;color:#6b5f8a;text-align:center;padding:40px;">Chargement…</div>`;
+    grid.innerHTML = `<div style="grid-column:span 4;color:#7a5f3a;text-align:center;padding:40px;">Chargement…</div>`;
     try {
       const prods = await api('GET', '/dashboard/products');
       grid.innerHTML = prods.map(p => `
@@ -2475,7 +2486,7 @@
                 ${p.stock > 0 ? `Stock: ${p.stock}` : 'Rupture'}
               </span>
             </div>
-            <div style="font-size:0.75rem;color:#6b5f8a;margin-top:6px;">Vendu: ${p.total_sold || 0}×</div>
+            <div style="font-size:0.75rem;color:#7a5f3a;margin-top:6px;">Vendu: ${p.total_sold || 0}×</div>
           </div>
         </div>`).join('');
     } catch (e) { grid.innerHTML = `<div style="grid-column:span 4;color:#f87171;text-align:center;padding:40px;">Erreur: ${e.message}</div>`; }
@@ -2598,24 +2609,24 @@
         display:flex;align-items:center;justify-content:center;padding:20px;
       `;
       modal.innerHTML = `
-        <div style="background:#0d0a18;border:1px solid rgba(212,168,67,0.4);border-radius:8px;
+        <div style="background:#110e04;border:1px solid rgba(245,166,35,0.4);border-radius:8px;
                     padding:36px;max-width:420px;width:100%;text-align:center;">
           <div style="font-size:3rem;margin-bottom:16px;">🏪</div>
-          <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#e8e0f5;margin-bottom:8px;">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fdf3e0;margin-bottom:8px;">
             Activez votre boutique
           </h2>
-          <p style="color:#a99cc5;font-size:0.9rem;margin-bottom:24px;">
+          <p style="color:#c4a97a;font-size:0.9rem;margin-bottom:24px;">
             Pour publier vos produits sur NexaShop, payez l'abonnement annuel via Wave.
           </p>
 
-          <div style="background:#1a1430;border-radius:6px;padding:20px;margin-bottom:24px;">
-            <div style="font-size:2rem;font-family:'DM Mono',monospace;color:#d4a843;font-weight:700;margin-bottom:4px;">
+          <div style="background:#201800;border-radius:6px;padding:20px;margin-bottom:24px;">
+            <div style="font-size:2rem;font-family:'DM Mono',monospace;color:#f5a623;font-weight:700;margin-bottom:4px;">
               3 000 FCFA
             </div>
-            <div style="color:#6b5f8a;font-size:0.82rem;">Abonnement annuel vendeur</div>
-            <div style="margin-top:12px;padding:10px;background:#0d0a18;border-radius:4px;">
-              <div style="font-size:0.78rem;color:#6b5f8a;margin-bottom:4px;">Votre paiement va sur</div>
-              <div style="font-family:'DM Mono',monospace;color:#a78bfa;font-size:0.95rem;">${res.wave_number}</div>
+            <div style="color:#7a5f3a;font-size:0.82rem;">Abonnement annuel vendeur</div>
+            <div style="margin-top:12px;padding:10px;background:#110e04;border-radius:4px;">
+              <div style="font-size:0.78rem;color:#7a5f3a;margin-bottom:4px;">Votre paiement va sur</div>
+              <div style="font-family:'DM Mono',monospace;color:#ff8c52;font-size:0.95rem;">${res.wave_number}</div>
             </div>
           </div>
 
@@ -2628,20 +2639,20 @@
 
           <div style="margin-bottom:16px;">
             <input type="text" id="wave-ref-input" placeholder="Référence Wave (optionnel)"
-                   style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);
-                          color:#e8e0f5;padding:10px 14px;border-radius:4px;font-size:0.85rem;
+                   style="width:100%;background:#201800;border:1px solid rgba(232,82,10,0.22);
+                          color:#fdf3e0;padding:10px 14px;border-radius:4px;font-size:0.85rem;
                           outline:none;margin-bottom:8px;">
           </div>
 
           <button onclick="confirmSubscription()"
-                  style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);
+                  style="width:100%;padding:13px;background:linear-gradient(135deg,#e8520a,#e8520a);
                          color:white;border:none;border-radius:4px;cursor:pointer;
                          font-weight:600;font-size:0.9rem;margin-bottom:10px;">
             ✅ J'ai payé — Activer ma boutique
           </button>
           <button onclick="document.getElementById('subscription-modal').remove();showPage('home');"
                   style="width:100%;padding:10px;background:transparent;
-                         border:1px solid rgba(124,58,237,0.2);color:#6b5f8a;
+                         border:1px solid rgba(232,82,10,0.18);color:#7a5f3a;
                          border-radius:4px;cursor:pointer;font-size:0.82rem;">
             Plus tard
           </button>
@@ -2685,9 +2696,9 @@
         if (mobAdminLink) mobAdminLink.style.display = 'none';
       }
       actions.innerHTML = `
-        <span style="color:#a99cc5;font-size:0.82rem;font-weight:500;">
+        <span style="color:#c4a97a;font-size:0.82rem;font-weight:500;">
           <span style="color:var(--violet-light);">●</span> ${currentUser.name}
-          ${currentUser.role === 'admin' ? '<span style="background:rgba(212,168,67,0.2);color:#d4a843;font-size:0.7rem;padding:2px 6px;border-radius:2px;margin-left:4px;">ADMIN</span>' : ''}
+          ${currentUser.role === 'admin' ? '<span style="background:rgba(212,168,67,0.2);color:#f5a623;font-size:0.7rem;padding:2px 6px;border-radius:2px;margin-left:4px;">ADMIN</span>' : ''}
         </span>
         <button class="btn btn-outline" onclick="logout()" style="padding:6px 16px;font-size:0.78rem;">Déconnexion</button>`;
     } else {
@@ -2720,29 +2731,29 @@
 
   function renderAdminKPIs(stats) {
     document.getElementById('admin-kpis').innerHTML = `
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
-        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#d4a843;font-weight:700;">${stats.users}</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Utilisateurs</div>
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#f5a623;font-weight:700;">${stats.users}</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;margin-top:4px;">Utilisateurs</div>
       </div>
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
-        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#a78bfa;font-weight:700;">${stats.sellers}</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Vendeurs actifs</div>
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#ff8c52;font-weight:700;">${stats.sellers}</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;margin-top:4px;">Vendeurs actifs</div>
       </div>
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
         <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#4ade80;font-weight:700;">${stats.orders}</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Commandes</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;margin-top:4px;">Commandes</div>
       </div>
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
-        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#d4a843;font-weight:700;">${stats.products}</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Produits</div>
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#f5a623;font-weight:700;">${stats.products}</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;margin-top:4px;">Produits</div>
       </div>
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
         <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#4ade80;font-weight:700;">${formatCFA(stats.revenue)}</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Revenus totaux</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;margin-top:4px;">Revenus totaux</div>
       </div>
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
-        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#a78bfa;font-weight:700;">${stats.buyers}</div>
-        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Acheteurs</div>
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.18);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#ff8c52;font-weight:700;">${stats.buyers}</div>
+        <div style="color:#7a5f3a;font-size:0.8rem;margin-top:4px;">Acheteurs</div>
       </div>
     `;
   }
@@ -2753,7 +2764,7 @@
       const btn = document.getElementById('atab-' + t);
       if (btn) {
         btn.style.background = t === tab ? 'var(--violet)' : 'transparent';
-        btn.style.color      = t === tab ? 'white' : '#6b5f8a';
+        btn.style.color      = t === tab ? 'white' : '#7a5f3a';
       }
     });
     loadAdminTab(tab);
@@ -2761,7 +2772,7 @@
 
   async function loadAdminTab(tab) {
     const content = document.getElementById('admin-content');
-    content.innerHTML = '<div style="text-align:center;padding:40px;color:#6b5f8a;">Chargement...</div>';
+    content.innerHTML = '<div style="text-align:center;padding:40px;color:#7a5f3a;">Chargement...</div>';
     try {
       if (tab === 'vendors')  await renderAdminVendors();
       if (tab === 'orders')   await renderAdminOrders();
@@ -2779,31 +2790,31 @@
       <div style="overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
           <thead>
-            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Vendeur</th>
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Boutique</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Abonnement</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Produits</th>
-              <th style="text-align:right;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Wave</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
+            <tr style="border-bottom:1px solid rgba(232,82,10,0.18);">
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Vendeur</th>
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Boutique</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Abonnement</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Produits</th>
+              <th style="text-align:right;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Wave</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
             </tr>
           </thead>
           <tbody>
             ${list.length ? list.map(v => `
-              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);transition:background 0.15s;" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
+              <tr style="border-bottom:1px solid rgba(245,166,35,0.08);transition:background 0.15s;" onmouseover="this.style.background='rgba(245,166,35,0.05)'" onmouseout="this.style.background='transparent'">
                 <td style="padding:14px 16px;">
-                  <div style="font-weight:600;color:#e8e0f5;">${v.name}</div>
-                  <div style="font-size:0.78rem;color:#6b5f8a;">${v.email}</div>
+                  <div style="font-weight:600;color:#fdf3e0;">${v.name}</div>
+                  <div style="font-size:0.78rem;color:#7a5f3a;">${v.email}</div>
                 </td>
-                <td style="padding:14px 16px;color:#a99cc5;">${v.shop_name || '—'}</td>
+                <td style="padding:14px 16px;color:#c4a97a;">${v.shop_name || '—'}</td>
                 <td style="padding:14px 16px;text-align:center;">
                   ${v.subscription_paid
                     ? '<span style="background:rgba(74,222,128,0.1);color:#4ade80;padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;">✅ ACTIF</span>'
                     : '<span style="background:rgba(248,113,113,0.1);color:#f87171;padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;">⏳ EN ATTENTE</span>'
                   }
                 </td>
-                <td style="padding:14px 16px;text-align:center;color:#a99cc5;">${v.product_count || 0}</td>
-                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;font-size:0.8rem;color:#a78bfa;">${v.wave_number || '—'}</td>
+                <td style="padding:14px 16px;text-align:center;color:#c4a97a;">${v.product_count || 0}</td>
+                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;font-size:0.8rem;color:#ff8c52;">${v.wave_number || '—'}</td>
                 <td style="padding:14px 16px;text-align:center;">
                   <div style="display:flex;gap:6px;justify-content:center;">
                     ${!v.subscription_paid ? `
@@ -2823,7 +2834,7 @@
                   </div>
                 </td>
               </tr>
-            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#6b5f8a;">Aucun vendeur</td></tr>`}
+            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#7a5f3a;">Aucun vendeur</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -2833,30 +2844,30 @@
   async function renderAdminOrders() {
     const res  = await api('GET', '/admin/orders');
     const list = res.orders || [];
-    const statusColor = { pending:'#f59e0b', processing:'#a78bfa', shipped:'#60a5fa', delivered:'#4ade80', cancelled:'#f87171' };
+    const statusColor = { pending:'#f59e0b', processing:'#ff8c52', shipped:'#60a5fa', delivered:'#4ade80', cancelled:'#f87171' };
     document.getElementById('admin-content').innerHTML = `
       <div style="overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
           <thead>
-            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">#</th>
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Client</th>
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Date</th>
-              <th style="text-align:right;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Total</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Action</th>
+            <tr style="border-bottom:1px solid rgba(232,82,10,0.18);">
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">#</th>
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Client</th>
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Date</th>
+              <th style="text-align:right;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Total</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Action</th>
             </tr>
           </thead>
           <tbody>
             ${list.length ? list.map(o => `
-              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
-                <td style="padding:14px 16px;font-family:'DM Mono',monospace;color:#a78bfa;">#${o.id}</td>
+              <tr style="border-bottom:1px solid rgba(245,166,35,0.08);" onmouseover="this.style.background='rgba(245,166,35,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:14px 16px;font-family:'DM Mono',monospace;color:#ff8c52;">#${o.id}</td>
                 <td style="padding:14px 16px;">
-                  <div style="color:#e8e0f5;font-weight:500;">${o.buyer_name || '—'}</div>
-                  <div style="font-size:0.75rem;color:#6b5f8a;">${o.buyer_email || ''}</div>
+                  <div style="color:#fdf3e0;font-weight:500;">${o.buyer_name || '—'}</div>
+                  <div style="font-size:0.75rem;color:#7a5f3a;">${o.buyer_email || ''}</div>
                 </td>
-                <td style="padding:14px 16px;color:#a99cc5;font-size:0.8rem;">${new Date(o.created_at).toLocaleDateString('fr-FR')}</td>
-                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;color:#d4a843;font-weight:600;">${formatCFA(o.total_amount)}</td>
+                <td style="padding:14px 16px;color:#c4a97a;font-size:0.8rem;">${new Date(o.created_at).toLocaleDateString('fr-FR')}</td>
+                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;color:#f5a623;font-weight:600;">${formatCFA(o.total_amount)}</td>
                 <td style="padding:14px 16px;text-align:center;">
                   <span style="background:${statusColor[o.status] || '#666'}22;color:${statusColor[o.status] || '#666'};padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;text-transform:uppercase;">
                     ${o.status}
@@ -2864,7 +2875,7 @@
                 </td>
                 <td style="padding:14px 16px;text-align:center;">
                   <select onchange="adminUpdateOrderStatus(${o.id}, this.value)"
-                          style="background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#a99cc5;padding:4px 8px;border-radius:3px;font-size:0.78rem;cursor:pointer;">
+                          style="background:#201800;border:1px solid rgba(232,82,10,0.22);color:#c4a97a;padding:4px 8px;border-radius:3px;font-size:0.78rem;cursor:pointer;">
                     <option value="">Changer...</option>
                     <option value="processing">Processing</option>
                     <option value="shipped">Expédié</option>
@@ -2873,7 +2884,7 @@
                   </select>
                 </td>
               </tr>
-            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#6b5f8a;">Aucune commande</td></tr>`}
+            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#7a5f3a;">Aucune commande</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -2883,26 +2894,26 @@
   async function renderAdminUsers() {
     const res  = await api('GET', '/admin/users');
     const list = res.users || [];
-    const roleColor = { admin:'#d4a843', seller:'#a78bfa', buyer:'#4ade80' };
+    const roleColor = { admin:'#f5a623', seller:'#ff8c52', buyer:'#4ade80' };
     document.getElementById('admin-content').innerHTML = `
       <div style="overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
           <thead>
-            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Nom</th>
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Email</th>
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Téléphone</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Rôle</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
+            <tr style="border-bottom:1px solid rgba(232,82,10,0.18);">
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Nom</th>
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Email</th>
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Téléphone</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Rôle</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
             </tr>
           </thead>
           <tbody>
             ${list.map(u => `
-              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
-                <td style="padding:14px 16px;font-weight:600;color:#e8e0f5;">${u.name}</td>
-                <td style="padding:14px 16px;color:#a99cc5;">${u.email}</td>
-                <td style="padding:14px 16px;font-family:'DM Mono',monospace;font-size:0.8rem;color:#a78bfa;">${u.phone || '—'}</td>
+              <tr style="border-bottom:1px solid rgba(245,166,35,0.08);" onmouseover="this.style.background='rgba(245,166,35,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:14px 16px;font-weight:600;color:#fdf3e0;">${u.name}</td>
+                <td style="padding:14px 16px;color:#c4a97a;">${u.email}</td>
+                <td style="padding:14px 16px;font-family:'DM Mono',monospace;font-size:0.8rem;color:#ff8c52;">${u.phone || '—'}</td>
                 <td style="padding:14px 16px;text-align:center;">
                   <span style="background:${roleColor[u.role] || '#666'}22;color:${roleColor[u.role] || '#666'};padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;text-transform:uppercase;">
                     ${u.role}
@@ -2919,7 +2930,7 @@
                     <button onclick="adminToggleUser(${u.id}, ${u.is_active})"
                             style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);color:#f87171;padding:5px 12px;border-radius:3px;cursor:pointer;font-size:0.75rem;">
                       ${u.is_active ? 'Suspendre' : 'Réactiver'}
-                    </button>` : '<span style="color:#6b5f8a;font-size:0.75rem;">—</span>'
+                    </button>` : '<span style="color:#7a5f3a;font-size:0.75rem;">—</span>'
                   }
                 </td>
               </tr>
@@ -2937,29 +2948,29 @@
       <div style="overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
           <thead>
-            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Produit</th>
-              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Boutique</th>
-              <th style="text-align:right;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Prix</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Stock</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
-              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
+            <tr style="border-bottom:1px solid rgba(232,82,10,0.18);">
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Produit</th>
+              <th style="text-align:left;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Boutique</th>
+              <th style="text-align:right;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Prix</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Stock</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
+              <th style="text-align:center;padding:12px 16px;color:#7a5f3a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
             </tr>
           </thead>
           <tbody>
             ${list.length ? list.map(p => `
-              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
+              <tr style="border-bottom:1px solid rgba(245,166,35,0.08);" onmouseover="this.style.background='rgba(245,166,35,0.05)'" onmouseout="this.style.background='transparent'">
                 <td style="padding:14px 16px;">
                   <div style="display:flex;align-items:center;gap:10px;">
                     <span style="font-size:1.4rem;">${p.emoji || '📦'}</span>
                     <div>
-                      <div style="font-weight:600;color:#e8e0f5;">${p.name}</div>
-                      <div style="font-size:0.75rem;color:#6b5f8a;">${p.category_name || '—'}</div>
+                      <div style="font-weight:600;color:#fdf3e0;">${p.name}</div>
+                      <div style="font-size:0.75rem;color:#7a5f3a;">${p.category_name || '—'}</div>
                     </div>
                   </div>
                 </td>
-                <td style="padding:14px 16px;color:#a99cc5;">${p.shop_name}</td>
-                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;color:#d4a843;">${formatCFA(p.price)}</td>
+                <td style="padding:14px 16px;color:#c4a97a;">${p.shop_name}</td>
+                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;color:#f5a623;">${formatCFA(p.price)}</td>
                 <td style="padding:14px 16px;text-align:center;">
                   <span style="color:${p.stock <= 3 ? '#f87171' : p.stock <= 10 ? '#f59e0b' : '#4ade80'};font-weight:600;">${p.stock}</span>
                 </td>
@@ -2976,7 +2987,7 @@
                   </button>
                 </td>
               </tr>
-            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#6b5f8a;">Aucun produit</td></tr>`}
+            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#7a5f3a;">Aucun produit</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -3040,10 +3051,10 @@
     const el = document.getElementById(containerId);
     if (!el) return;
     el.innerHTML = Array(count).fill(`
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.15);border-radius:4px;overflow:hidden;animation:pulse 1.5s infinite;">
-        <div style="height:180px;background:linear-gradient(90deg,#1a1430,#221b33,#1a1430);background-size:200%;"></div>
-        <div style="padding:16px;"><div style="height:12px;background:#221b33;border-radius:2px;margin-bottom:8px;"></div>
-        <div style="height:10px;background:#221b33;border-radius:2px;width:60%;"></div></div>
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.15);border-radius:4px;overflow:hidden;animation:pulse 1.5s infinite;">
+        <div style="height:180px;background:linear-gradient(90deg,#201800,#241a04,#201800);background-size:200%;"></div>
+        <div style="padding:16px;"><div style="height:12px;background:#241a04;border-radius:2px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:#241a04;border-radius:2px;width:60%;"></div></div>
       </div>`).join('');
   }
 
@@ -3099,10 +3110,10 @@
     const el = document.getElementById(containerId);
     if (!el) return;
     el.innerHTML = Array(count).fill(`
-      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.15);border-radius:4px;overflow:hidden;animation:pulse 1.5s infinite;">
-        <div style="height:180px;background:linear-gradient(90deg,#1a1430,#221b33,#1a1430);background-size:200%;"></div>
-        <div style="padding:16px;"><div style="height:12px;background:#221b33;border-radius:2px;margin-bottom:8px;"></div>
-        <div style="height:10px;background:#221b33;border-radius:2px;width:60%;"></div></div>
+      <div style="background:#201800;border:1px solid rgba(232,82,10,0.15);border-radius:4px;overflow:hidden;animation:pulse 1.5s infinite;">
+        <div style="height:180px;background:linear-gradient(90deg,#201800,#241a04,#201800);background-size:200%;"></div>
+        <div style="padding:16px;"><div style="height:12px;background:#241a04;border-radius:2px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:#241a04;border-radius:2px;width:60%;"></div></div>
       </div>`).join('');
   }
 
@@ -3134,7 +3145,7 @@
   }
 </style>
 <!-- ===== FOOTER ===== -->
-<footer style="background:#0d0a18;border-top:1px solid rgba(124,58,237,0.15);padding:48px 40px 24px;margin-top:80px;">
+<footer style="background:#110e04;border-top:1px solid rgba(232,82,10,0.15);padding:48px 40px 24px;margin-top:80px;">
   <div style="max-width:1200px;margin:0 auto;">
 
     <!-- Grille principale -->
@@ -3142,17 +3153,17 @@
 
       <!-- Colonne marque -->
       <div>
-        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#e8e0f5;margin-bottom:8px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:900;color:#fdf3e0;margin-bottom:8px;">
           Nexa<span style="color:var(--gold);font-style:italic;">Shop</span>
         </div>
-        <p style="color:#6b5f8a;font-size:0.85rem;line-height:1.6;margin-bottom:16px;">
+        <p style="color:#7a5f3a;font-size:0.85rem;line-height:1.6;margin-bottom:16px;">
           La place de marché ivoirienne. Achetez, vendez et prospérez en toute confiance.
         </p>
         <div style="display:flex;flex-direction:column;gap:6px;">
-          <a href="tel:+2250758684027" style="color:#a78bfa;font-size:0.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;">
+          <a href="tel:+2250758684027" style="color:#ff8c52;font-size:0.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;">
             🚨 <strong>Urgence :</strong>&nbsp;+225 07 58 68 40 27
           </a>
-          <a href="/cdn-cgi/l/email-protection#442520292d2a042a213c25372c2b346a272d" style="color:#6b5f8a;font-size:0.82rem;text-decoration:none;">
+          <a href="/cdn-cgi/l/email-protection#442520292d2a042a213c25372c2b346a272d" style="color:#7a5f3a;font-size:0.82rem;text-decoration:none;">
             ✉️ <span class="__cf_email__" data-cfemail="2746434a4e496749425f46544f485709444e">[email&#160;protected]</span>
           </a>
         </div>
@@ -3160,45 +3171,45 @@
 
       <!-- Colonne navigation -->
       <div>
-        <div style="font-size:0.75rem;font-weight:700;color:#e8e0f5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Navigation</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#fdf3e0;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Navigation</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <a onclick="showPage('home')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Accueil</a>
-          <a onclick="showPage('catalogue')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Catalogue</a>
-          <a onclick="showPage('tracking')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Suivi commande</a>
-          <a onclick="showPage('dashboard')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Espace vendeur</a>
+          <a onclick="showPage('home')" style="color:#7a5f3a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#ff8c52'" onmouseout="this.style.color='#7a5f3a'">Accueil</a>
+          <a onclick="showPage('catalogue')" style="color:#7a5f3a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#ff8c52'" onmouseout="this.style.color='#7a5f3a'">Catalogue</a>
+          <a onclick="showPage('tracking')" style="color:#7a5f3a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#ff8c52'" onmouseout="this.style.color='#7a5f3a'">Suivi commande</a>
+          <a onclick="showPage('dashboard')" style="color:#7a5f3a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#ff8c52'" onmouseout="this.style.color='#7a5f3a'">Espace vendeur</a>
         </div>
       </div>
 
       <!-- Colonne vendeurs -->
       <div>
-        <div style="font-size:0.75rem;font-weight:700;color:#e8e0f5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Vendeurs</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#fdf3e0;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Vendeurs</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <a onclick="openModal('register')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Créer ma boutique</a>
-          <a onclick="showPage('dashboard')" style="color:#6b5f8a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#6b5f8a'">Mon tableau de bord</a>
-          <span style="color:#6b5f8a;font-size:0.85rem;">Abonnement : 3 000 FCFA</span>
-          <span style="color:#6b5f8a;font-size:0.85rem;">Paiement via Wave</span>
+          <a onclick="openModal('register')" style="color:#7a5f3a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#ff8c52'" onmouseout="this.style.color='#7a5f3a'">Créer ma boutique</a>
+          <a onclick="showPage('dashboard')" style="color:#7a5f3a;font-size:0.85rem;cursor:pointer;text-decoration:none;" onmouseover="this.style.color='#ff8c52'" onmouseout="this.style.color='#7a5f3a'">Mon tableau de bord</a>
+          <span style="color:#7a5f3a;font-size:0.85rem;">Abonnement : 3 000 FCFA</span>
+          <span style="color:#7a5f3a;font-size:0.85rem;">Paiement via Wave</span>
         </div>
       </div>
 
       <!-- Colonne paiement -->
       <div>
-        <div style="font-size:0.75rem;font-weight:700;color:#e8e0f5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Paiement</div>
+        <div style="font-size:0.75rem;font-weight:700;color:#fdf3e0;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Paiement</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;align-items:center;gap:8px;">
-            <span style="background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);color:#d4a843;padding:4px 10px;border-radius:4px;font-size:0.78rem;font-weight:600;">📱 Wave</span>
+            <span style="background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);color:#f5a623;padding:4px 10px;border-radius:4px;font-size:0.78rem;font-weight:600;">📱 Wave</span>
           </div>
-          <span style="color:#6b5f8a;font-size:0.82rem;">Paiement direct vendeur</span>
-          <span style="color:#6b5f8a;font-size:0.82rem;">100% sécurisé</span>
-          <span style="color:#6b5f8a;font-size:0.82rem;">Prix en FCFA</span>
+          <span style="color:#7a5f3a;font-size:0.82rem;">Paiement direct vendeur</span>
+          <span style="color:#7a5f3a;font-size:0.82rem;">100% sécurisé</span>
+          <span style="color:#7a5f3a;font-size:0.82rem;">Prix en FCFA</span>
         </div>
       </div>
 
     </div>
 
     <!-- Séparateur -->
-    <div style="border-top:1px solid rgba(124,58,237,0.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-      <div style="color:#6b5f8a;font-size:0.78rem;">
-        © 2026 <span style="color:#a78bfa;font-weight:600;">NexaShop</span> — 
-        Conçu par <span style="color:#d4a843;font-weight:600;">The Code</span> · Tous droits réservés
+    <div style="border-top:1px solid rgba(232,82,10,0.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div style="color:#7a5f3a;font-size:0.78rem;">
+        © 2026 <span style="color:#ff8c52;font-weight:600;">NexaShop</span> — 
+        Conçu par <span style="color:#f5a623;font-weight:600;">The Code</span> · Tous droits réservés
       </div>
-      <div style="color:#4a3f5c;font-si
+      <div style="color:#5a3f20;font-si
