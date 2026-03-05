@@ -21,12 +21,15 @@ from flask import Flask, request, jsonify, g, send_from_directory
 # ==============================================================================
 # CONFIG
 # ==============================================================================
-BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
-STATIC       = os.path.join(BASE_DIR, "static")
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC   = os.path.join(BASE_DIR, "static")
+
+# Lecture robuste de DATABASE_URL — compatible Python 3.14 + Render
+_db_url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL") or \
     "postgresql://postgres:JaXlExHdvvLFEoKxfDWbVTPrhPjbPamc@shortline.proxy.rlwy.net:21560/railway"
-)
+# Render injecte parfois "postgres://" au lieu de "postgresql://"
+DATABASE_URL = _db_url.replace("postgres://", "postgresql://", 1) if _db_url.startswith("postgres://") else _db_url
+print(f"[DB] Connexion vers : {DATABASE_URL[:40]}...")
 
 app = Flask(__name__, static_folder=STATIC, static_url_path="")
 app.secret_key = "nexashop_secret_2026"
