@@ -1437,6 +1437,7 @@
     <li><a onclick="showPage('home')" class="active" id="nav-home">Accueil</a></li>
     <li><a onclick="showPage('catalogue')" id="nav-catalogue">Catalogue</a></li>
     <li><a onclick="showPage('dashboard')" id="nav-dashboard">Espace Vendeur</a></li>
+    <li><a onclick="showPage('admin')" id="nav-admin" style="display:none;">⚙️ Admin</a></li>
     <li><a onclick="showPage('cart')" id="nav-cart">Panier <span id="cart-count" style="color:var(--gold)"></span></a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:8px;">
@@ -1455,6 +1456,7 @@
   <a onclick="showPage('home');toggleMobileMenu()" id="mob-home">🏠 Accueil</a>
   <a onclick="showPage('catalogue');toggleMobileMenu()" id="mob-catalogue">🛍️ Catalogue</a>
   <a onclick="showPage('dashboard');toggleMobileMenu()" id="mob-dashboard">📊 Espace Vendeur</a>
+  <a onclick="showPage('admin');toggleMobileMenu()" id="mob-admin" style="display:none;">⚙️ Admin</a>
   <a onclick="showPage('cart');toggleMobileMenu()" id="mob-cart">🛒 Panier <span id="cart-count-mobile" style="color:var(--gold)"></span></a>
 </div>
 
@@ -1475,7 +1477,7 @@
         <em>Prospérez.</em>
       </h1>
       <p class="hero-subtitle">
-        Agora connecte vendeurs passionnés et acheteurs exigeants. 
+        NexaShop connecte vendeurs passionnés et acheteurs exigeants. 
         Découvrez des produits uniques ou lancez votre boutique en quelques minutes.
       </p>
       <div class="hero-ctas">
@@ -1768,7 +1770,60 @@
 </div>
 
 <!-- ===== CART PAGE ===== -->
-<div id="page-cart" class="page">
+<!-- ===== ADMIN PAGE ===== -->
+<div id="page-admin" class="page">
+  <div class="page-inner" style="padding:32px 40px;max-width:1200px;margin:0 auto;">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
+      <div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#e8e0f5;">
+          ⚙️ Dashboard <span style="color:var(--gold);font-style:italic;">Admin</span>
+        </h1>
+        <p style="color:#6b5f8a;font-size:0.85rem;margin-top:4px;">Gestion complète de la plateforme NexaShop</p>
+      </div>
+      <button onclick="loadAdmin()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;padding:8px 18px;border-radius:4px;cursor:pointer;font-size:0.82rem;">
+        🔄 Actualiser
+      </button>
+    </div>
+
+    <!-- KPIs globaux -->
+    <div id="admin-kpis" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:4px;">⏳</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;">Chargement...</div>
+      </div>
+    </div>
+
+    <!-- Onglets -->
+    <div style="display:flex;gap:4px;margin-bottom:24px;background:#1a1430;border-radius:6px;padding:4px;width:fit-content;">
+      <button onclick="adminTab('vendors')" id="atab-vendors"
+              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:var(--violet);color:white;">
+        🏪 Vendeurs
+      </button>
+      <button onclick="adminTab('orders')" id="atab-orders"
+              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">
+        📦 Commandes
+      </button>
+      <button onclick="adminTab('users')" id="atab-users"
+              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">
+        👥 Utilisateurs
+      </button>
+      <button onclick="adminTab('products')" id="atab-products"
+              style="padding:8px 20px;border-radius:4px;border:none;cursor:pointer;font-size:0.85rem;font-weight:600;background:transparent;color:#6b5f8a;">
+        🛍️ Produits
+      </button>
+    </div>
+
+    <!-- Contenu onglets -->
+    <div id="admin-content">
+      <div style="text-align:center;padding:60px;color:#6b5f8a;">Chargement...</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== CART PAGE ===== -->
   <div class="page-inner" style="padding-bottom:0;">
     <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;margin-bottom:8px;color:#e8e0f5;">Votre Panier</h1>
     <p style="color:#6b5f8a;font-size:0.9rem;margin-bottom:0;" id="cart-subtitle">3 articles de 2 vendeurs</p>
@@ -1914,11 +1969,14 @@
   async function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    document.getElementById('nav-' + name).classList.add('active');
+    const page = document.getElementById('page-' + name);
+    const nav  = document.getElementById('nav-' + name);
+    if (page) page.classList.add('active');
+    if (nav)  nav.classList.add('active');
     if (name === 'catalogue') await loadCatalogue();
     if (name === 'cart')      renderCart();
     if (name === 'dashboard') await loadDashboard();
+    if (name === 'admin')     await loadAdmin();
     window.scrollTo(0, 0);
   }
 
@@ -2597,20 +2655,370 @@
 
   function updateNavUser() {
     const actions = document.querySelector('.nav-actions');
+    const adminLink    = document.getElementById('nav-admin');
+    const mobAdminLink = document.getElementById('mob-admin');
+
     if (currentUser) {
+      // Afficher le lien admin si role admin
+      if (currentUser.role === 'admin') {
+        if (adminLink)    adminLink.style.display    = 'block';
+        if (mobAdminLink) mobAdminLink.style.display = 'block';
+      } else {
+        if (adminLink)    adminLink.style.display    = 'none';
+        if (mobAdminLink) mobAdminLink.style.display = 'none';
+      }
       actions.innerHTML = `
         <span style="color:#a99cc5;font-size:0.82rem;font-weight:500;">
           <span style="color:var(--violet-light);">●</span> ${currentUser.name}
+          ${currentUser.role === 'admin' ? '<span style="background:rgba(212,168,67,0.2);color:#d4a843;font-size:0.7rem;padding:2px 6px;border-radius:2px;margin-left:4px;">ADMIN</span>' : ''}
         </span>
         <button class="btn btn-outline" onclick="logout()" style="padding:6px 16px;font-size:0.78rem;">Déconnexion</button>`;
     } else {
+      if (adminLink)    adminLink.style.display    = 'none';
+      if (mobAdminLink) mobAdminLink.style.display = 'none';
       actions.innerHTML = `
         <button class="btn btn-outline" onclick="openModal()">Connexion</button>
         <button class="btn btn-primary" onclick="openModal('register')">S'inscrire</button>`;
     }
   }
 
-  // ══ UTILITAIRES ══════════════════════════════════════
+  // ══ ADMIN ════════════════════════════════════════════
+  let adminCurrentTab = 'vendors';
+  let adminData = { vendors: [], orders: [], users: [], products: [] };
+
+  async function loadAdmin() {
+    if (!currentUser || currentUser.role !== 'admin') {
+      showToast('❌ Accès réservé à l\'administrateur');
+      showPage('home');
+      return;
+    }
+    try {
+      // Charger les stats globales
+      const stats = await api('GET', '/admin/stats');
+      renderAdminKPIs(stats);
+      // Charger les données de l'onglet actif
+      await loadAdminTab(adminCurrentTab);
+    } catch (e) { showToast('❌ ' + e.message); }
+  }
+
+  function renderAdminKPIs(stats) {
+    document.getElementById('admin-kpis').innerHTML = `
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#d4a843;font-weight:700;">${stats.users}</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Utilisateurs</div>
+      </div>
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#a78bfa;font-weight:700;">${stats.sellers}</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Vendeurs actifs</div>
+      </div>
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#4ade80;font-weight:700;">${stats.orders}</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Commandes</div>
+      </div>
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#d4a843;font-weight:700;">${stats.products}</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Produits</div>
+      </div>
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#4ade80;font-weight:700;">${formatCFA(stats.revenue)}</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Revenus totaux</div>
+      </div>
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:20px;text-align:center;">
+        <div style="font-size:1.8rem;font-family:'DM Mono',monospace;color:#a78bfa;font-weight:700;">${stats.buyers}</div>
+        <div style="color:#6b5f8a;font-size:0.8rem;margin-top:4px;">Acheteurs</div>
+      </div>
+    `;
+  }
+
+  function adminTab(tab) {
+    adminCurrentTab = tab;
+    ['vendors','orders','users','products'].forEach(t => {
+      const btn = document.getElementById('atab-' + t);
+      if (btn) {
+        btn.style.background = t === tab ? 'var(--violet)' : 'transparent';
+        btn.style.color      = t === tab ? 'white' : '#6b5f8a';
+      }
+    });
+    loadAdminTab(tab);
+  }
+
+  async function loadAdminTab(tab) {
+    const content = document.getElementById('admin-content');
+    content.innerHTML = '<div style="text-align:center;padding:40px;color:#6b5f8a;">Chargement...</div>';
+    try {
+      if (tab === 'vendors')  await renderAdminVendors();
+      if (tab === 'orders')   await renderAdminOrders();
+      if (tab === 'users')    await renderAdminUsers();
+      if (tab === 'products') await renderAdminProducts();
+    } catch(e) {
+      content.innerHTML = `<div style="text-align:center;padding:40px;color:#f87171;">Erreur: ${e.message}</div>`;
+    }
+  }
+
+  async function renderAdminVendors() {
+    const res  = await api('GET', '/admin/vendors');
+    const list = res.vendors || [];
+    document.getElementById('admin-content').innerHTML = `
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Vendeur</th>
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Boutique</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Abonnement</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Produits</th>
+              <th style="text-align:right;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Wave</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.length ? list.map(v => `
+              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);transition:background 0.15s;" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:14px 16px;">
+                  <div style="font-weight:600;color:#e8e0f5;">${v.name}</div>
+                  <div style="font-size:0.78rem;color:#6b5f8a;">${v.email}</div>
+                </td>
+                <td style="padding:14px 16px;color:#a99cc5;">${v.shop_name || '—'}</td>
+                <td style="padding:14px 16px;text-align:center;">
+                  ${v.subscription_paid
+                    ? '<span style="background:rgba(74,222,128,0.1);color:#4ade80;padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;">✅ ACTIF</span>'
+                    : '<span style="background:rgba(248,113,113,0.1);color:#f87171;padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;">⏳ EN ATTENTE</span>'
+                  }
+                </td>
+                <td style="padding:14px 16px;text-align:center;color:#a99cc5;">${v.product_count || 0}</td>
+                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;font-size:0.8rem;color:#a78bfa;">${v.wave_number || '—'}</td>
+                <td style="padding:14px 16px;text-align:center;">
+                  <div style="display:flex;gap:6px;justify-content:center;">
+                    ${!v.subscription_paid ? `
+                      <button onclick="adminActivateVendor(${v.shop_id})"
+                              style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:#4ade80;padding:5px 12px;border-radius:3px;cursor:pointer;font-size:0.75rem;">
+                        Activer
+                      </button>` : `
+                      <button onclick="adminDeactivateVendor(${v.shop_id})"
+                              style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:#f87171;padding:5px 12px;border-radius:3px;cursor:pointer;font-size:0.75rem;">
+                        Désactiver
+                      </button>`
+                    }
+                    <button onclick="adminDeleteUser(${v.user_id})"
+                            style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.2);color:#f87171;padding:5px 10px;border-radius:3px;cursor:pointer;font-size:0.75rem;">
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#6b5f8a;">Aucun vendeur</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  async function renderAdminOrders() {
+    const res  = await api('GET', '/admin/orders');
+    const list = res.orders || [];
+    const statusColor = { pending:'#f59e0b', processing:'#a78bfa', shipped:'#60a5fa', delivered:'#4ade80', cancelled:'#f87171' };
+    document.getElementById('admin-content').innerHTML = `
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">#</th>
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Client</th>
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Date</th>
+              <th style="text-align:right;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Total</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.length ? list.map(o => `
+              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:14px 16px;font-family:'DM Mono',monospace;color:#a78bfa;">#${o.id}</td>
+                <td style="padding:14px 16px;">
+                  <div style="color:#e8e0f5;font-weight:500;">${o.buyer_name || '—'}</div>
+                  <div style="font-size:0.75rem;color:#6b5f8a;">${o.buyer_email || ''}</div>
+                </td>
+                <td style="padding:14px 16px;color:#a99cc5;font-size:0.8rem;">${new Date(o.created_at).toLocaleDateString('fr-FR')}</td>
+                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;color:#d4a843;font-weight:600;">${formatCFA(o.total_amount)}</td>
+                <td style="padding:14px 16px;text-align:center;">
+                  <span style="background:${statusColor[o.status] || '#666'}22;color:${statusColor[o.status] || '#666'};padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;text-transform:uppercase;">
+                    ${o.status}
+                  </span>
+                </td>
+                <td style="padding:14px 16px;text-align:center;">
+                  <select onchange="adminUpdateOrderStatus(${o.id}, this.value)"
+                          style="background:#1a1430;border:1px solid rgba(124,58,237,0.25);color:#a99cc5;padding:4px 8px;border-radius:3px;font-size:0.78rem;cursor:pointer;">
+                    <option value="">Changer...</option>
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Expédié</option>
+                    <option value="delivered">Livré</option>
+                    <option value="cancelled">Annulé</option>
+                  </select>
+                </td>
+              </tr>
+            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#6b5f8a;">Aucune commande</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  async function renderAdminUsers() {
+    const res  = await api('GET', '/admin/users');
+    const list = res.users || [];
+    const roleColor = { admin:'#d4a843', seller:'#a78bfa', buyer:'#4ade80' };
+    document.getElementById('admin-content').innerHTML = `
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Nom</th>
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Email</th>
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Téléphone</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Rôle</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(u => `
+              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:14px 16px;font-weight:600;color:#e8e0f5;">${u.name}</td>
+                <td style="padding:14px 16px;color:#a99cc5;">${u.email}</td>
+                <td style="padding:14px 16px;font-family:'DM Mono',monospace;font-size:0.8rem;color:#a78bfa;">${u.phone || '—'}</td>
+                <td style="padding:14px 16px;text-align:center;">
+                  <span style="background:${roleColor[u.role] || '#666'}22;color:${roleColor[u.role] || '#666'};padding:3px 10px;border-radius:2px;font-size:0.75rem;font-weight:600;text-transform:uppercase;">
+                    ${u.role}
+                  </span>
+                </td>
+                <td style="padding:14px 16px;text-align:center;">
+                  ${u.is_active
+                    ? '<span style="color:#4ade80;font-size:0.8rem;">● Actif</span>'
+                    : '<span style="color:#f87171;font-size:0.8rem;">● Inactif</span>'
+                  }
+                </td>
+                <td style="padding:14px 16px;text-align:center;">
+                  ${u.role !== 'admin' ? `
+                    <button onclick="adminToggleUser(${u.id}, ${u.is_active})"
+                            style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);color:#f87171;padding:5px 12px;border-radius:3px;cursor:pointer;font-size:0.75rem;">
+                      ${u.is_active ? 'Suspendre' : 'Réactiver'}
+                    </button>` : '<span style="color:#6b5f8a;font-size:0.75rem;">—</span>'
+                  }
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  async function renderAdminProducts() {
+    const res  = await api('GET', '/admin/products');
+    const list = res.products || [];
+    document.getElementById('admin-content').innerHTML = `
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(124,58,237,0.2);">
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Produit</th>
+              <th style="text-align:left;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Boutique</th>
+              <th style="text-align:right;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Prix</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Stock</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Statut</th>
+              <th style="text-align:center;padding:12px 16px;color:#6b5f8a;font-weight:600;text-transform:uppercase;font-size:0.75rem;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.length ? list.map(p => `
+              <tr style="border-bottom:1px solid rgba(124,58,237,0.08);" onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:14px 16px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:1.4rem;">${p.emoji || '📦'}</span>
+                    <div>
+                      <div style="font-weight:600;color:#e8e0f5;">${p.name}</div>
+                      <div style="font-size:0.75rem;color:#6b5f8a;">${p.category_name || '—'}</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="padding:14px 16px;color:#a99cc5;">${p.shop_name}</td>
+                <td style="padding:14px 16px;text-align:right;font-family:'DM Mono',monospace;color:#d4a843;">${formatCFA(p.price)}</td>
+                <td style="padding:14px 16px;text-align:center;">
+                  <span style="color:${p.stock <= 3 ? '#f87171' : p.stock <= 10 ? '#f59e0b' : '#4ade80'};font-weight:600;">${p.stock}</span>
+                </td>
+                <td style="padding:14px 16px;text-align:center;">
+                  ${p.is_active
+                    ? '<span style="color:#4ade80;font-size:0.8rem;">● Actif</span>'
+                    : '<span style="color:#f87171;font-size:0.8rem;">● Inactif</span>'
+                  }
+                </td>
+                <td style="padding:14px 16px;text-align:center;">
+                  <button onclick="adminToggleProduct(${p.id}, ${p.is_active})"
+                          style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);color:#f87171;padding:5px 12px;border-radius:3px;cursor:pointer;font-size:0.75rem;">
+                    ${p.is_active ? 'Désactiver' : 'Réactiver'}
+                  </button>
+                </td>
+              </tr>
+            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:40px;color:#6b5f8a;">Aucun produit</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // Actions admin
+  async function adminActivateVendor(shopId) {
+    try {
+      await api('PUT', `/admin/shops/${shopId}/activate`);
+      showToast('✅ Boutique activée !');
+      await renderAdminVendors();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
+
+  async function adminDeactivateVendor(shopId) {
+    if (!confirm('Désactiver cette boutique ?')) return;
+    try {
+      await api('PUT', `/admin/shops/${shopId}/deactivate`);
+      showToast('✅ Boutique désactivée');
+      await renderAdminVendors();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
+
+  async function adminToggleUser(userId, isActive) {
+    const action = isActive ? 'suspendre' : 'réactiver';
+    if (!confirm(`Voulez-vous ${action} cet utilisateur ?`)) return;
+    try {
+      await api('PUT', `/admin/users/${userId}/toggle`);
+      showToast(`✅ Utilisateur ${action === 'suspendre' ? 'suspendu' : 'réactivé'}`);
+      await renderAdminUsers();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
+
+  async function adminToggleProduct(productId, isActive) {
+    try {
+      await api('PUT', `/admin/products/${productId}/toggle`);
+      showToast(isActive ? '✅ Produit désactivé' : '✅ Produit réactivé');
+      await renderAdminProducts();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
+
+  async function adminUpdateOrderStatus(orderId, status) {
+    if (!status) return;
+    try {
+      await api('PUT', `/orders/${orderId}/status`, { status });
+      showToast(`✅ Commande #${orderId} → ${status}`);
+      await renderAdminOrders();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
+
+  async function adminDeleteUser(userId) {
+    if (!confirm('Supprimer définitivement cet utilisateur ? Cette action est irréversible.')) return;
+    try {
+      await api('DELETE', `/admin/users/${userId}`);
+      showToast('✅ Utilisateur supprimé');
+      await renderAdminVendors();
+    } catch(e) { showToast('❌ ' + e.message); }
+  }
   function showLoader(containerId, count) {
     const el = document.getElementById(containerId);
     if (!el) return;
