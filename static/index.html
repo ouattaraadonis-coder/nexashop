@@ -1839,12 +1839,6 @@
     <div class="order-summary">
       <div class="summary-title">Récapitulatif</div>
       <div class="summary-row"><span>Sous-total</span><span id="subtotal">-</span></div>
-      <div class="summary-row"><span>Frais de livraison</span><span>2 500 FCFA</span></div>
-      <div class="summary-row"><span>Remise</span><span style="color:var(--sage);">-0 FCFA</span></div>
-      <div class="promo-input">
-        <input type="text" placeholder="Code promo">
-        <button class="btn btn-outline" style="padding:8px 16px;border-color:rgba(200,150,62,0.4);color:var(--gold);" onclick="applyPromo()">OK</button>
-      </div>
       <div class="summary-total"><span>Total</span><span id="total-price">-</span></div>
       <button class="checkout-btn" onclick="checkout()">📱 Payer avec Wave</button>
       <p style="text-align:center;font-size:0.75rem;color:#6b5f8a;margin-top:12px;">🔒 Paiement 100% sécurisé</p>
@@ -1954,7 +1948,7 @@
   }
 
   // ── Formatage prix en Franc CFA ───────────────────────
-  const DELIVERY_FEE = 2500; // Frais de livraison en FCFA
+  // ── Panier ──
 
   function formatCFA(amount) {
     return Math.round(amount).toLocaleString('fr-FR') + ' FCFA';
@@ -2420,7 +2414,7 @@
     if (!cart.length) {
       list.innerHTML = `<div class="empty-state"><div class="icon">🛒</div><h3>Votre panier est vide</h3><p>Parcourez le catalogue pour trouver des produits</p><button class="btn btn-primary" style="padding:12px 32px;" onclick="showPage('catalogue')">Voir le catalogue</button></div>`;
       document.getElementById('subtotal').textContent = '0 FCFA';
-      document.getElementById('total-price').textContent = formatCFA(DELIVERY_FEE);
+      document.getElementById('total-price').textContent = '0 FCFA';
       return;
     }
     const sellers = new Set(cart.map(x => x.shop_name)).size;
@@ -2442,7 +2436,7 @@
       </div>`).join('');
     const subtotal = cart.reduce((s,x) => s + x.price * x.qty, 0);
     document.getElementById('subtotal').textContent = formatCFA(subtotal);
-    document.getElementById('total-price').textContent = formatCFA(subtotal + DELIVERY_FEE);
+    document.getElementById('total-price').textContent = formatCFA(subtotal);
   }
 
   function changeQty(id, d) {
@@ -2472,12 +2466,9 @@
     const btn = document.querySelector('.checkout-btn');
     if (btn) { btn.textContent = 'Préparation...'; btn.disabled = true; }
 
-    const promoCode = document.querySelector('.promo-input input')?.value?.trim();
     try {
       const items = cart.map(x => ({ product_id: x.id, quantity: x.qty }));
-      const res = await api('POST', '/payment/wave/checkout', {
-        items, promo_code: promoCode || undefined
-      });
+      const res = await api('POST', '/payment/wave/checkout', { items });
       showWavePaymentModal(res);
     } catch (e) {
       showToast('❌ ' + e.message);
@@ -2597,24 +2588,6 @@
     }
   }
 
-  async function applyPromo() {
-    const code = document.querySelector('.promo-input input')?.value?.trim();
-    if (!code) return;
-    try {
-      const res = await api('POST', '/promo/check', { code });
-      if (res.valid) {
-        showToast(`✅ Code ${res.code} valide — ${res.discount}% de réduction !`);
-        const subtotal = cart.reduce((s,x) => s + x.price * x.qty, 0);
-        const discount = subtotal * res.discount / 100;
-        const total    = subtotal + DELIVERY_FEE - discount;
-        document.getElementById('total-price').textContent = formatCFA(total);
-        document.querySelector('.summary-row:nth-child(3) span:last-child').textContent = '-' + formatCFA(discount);
-        document.querySelector('.summary-row:nth-child(3) span:last-child').style.color = '#4ade80';
-      } else {
-        showToast('❌ ' + res.error);
-      }
-    } catch (e) { showToast('❌ ' + e.message); }
-  }
 
   // ══ DASHBOARD ════════════════════════════════════════
   async function loadDashboard() {
