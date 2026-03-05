@@ -20,7 +20,7 @@ BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 STATIC       = os.path.join(BASE_DIR, "static")
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "postgresql://postgres:JaXlExHdvvLFEoKxfDWbVTPrhPjbPamc@postgres.railway.internal:5432/railway"
+    "postgresql://postgres:JaXlExHdvvLFEoKxfDWbVTPrhPjbPamc@shortline.proxy.rlwy.net:21560/railway"
 )
 
 app = Flask(__name__, static_folder=STATIC, static_url_path="")
