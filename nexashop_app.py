@@ -39,7 +39,7 @@ def ensure_db():
 # TWILIO SMS
 # ==============================================================================
 TWILIO_SID    = os.environ.get("TWILIO_SID",    "AC5dd3e34db0ca71f9edd2280e64828020")
-TWILIO_TOKEN  = os.environ.get("TWILIO_TOKEN",  "1e454698c062a894606dd3269b09371d")
+TWILIO_TOKEN  = os.environ.get("TWILIO_TOKEN",  "d69c28bab445001b6261ddbe0c075d0d")
 TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER", "+17405737973")
 
 def send_sms(to_number, message):
