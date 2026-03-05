@@ -355,6 +355,31 @@ def init_db():
             is_active  INTEGER DEFAULT 1,
             created_at TIMESTAMP DEFAULT NOW()
         );
+        CREATE TABLE IF NOT EXISTS deliveries (
+            id               SERIAL PRIMARY KEY,
+            order_id         INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+            shop_id          INTEGER NOT NULL REFERENCES shops(id),
+            status           TEXT NOT NULL DEFAULT 'preparing'
+                             CHECK(status IN ('preparing','handed_over','in_transit','out_for_delivery','delivered','returned')),
+            delivery_type    TEXT NOT NULL DEFAULT 'delivery'
+                             CHECK(delivery_type IN ('delivery','pickup')),
+            tracking_number  TEXT,
+            carrier          TEXT,
+            carrier_url      TEXT,
+            notes            TEXT,
+            estimated_date   DATE,
+            delivered_at     TIMESTAMP,
+            created_at       TIMESTAMP DEFAULT NOW(),
+            updated_at       TIMESTAMP DEFAULT NOW()
+        );
+        CREATE TABLE IF NOT EXISTS delivery_events (
+            id          SERIAL PRIMARY KEY,
+            delivery_id INTEGER NOT NULL REFERENCES deliveries(id) ON DELETE CASCADE,
+            status      TEXT NOT NULL,
+            description TEXT,
+            location    TEXT,
+            created_at  TIMESTAMP DEFAULT NOW()
+        );
     """)
 
     # Donnees initiales si vide
@@ -1091,6 +1116,187 @@ def push_unsubscribe():
         run("UPDATE push_subscriptions SET is_active=0 WHERE endpoint=%s AND user_id=%s",
             (endpoint, g.current_user["id"]))
     return jsonify({"message": "Souscription supprimee"})
+
+# ==============================================================================
+# LIVRAISON — Suivi des colis
+# ==============================================================================
+
+DELIVERY_STATUSES = {
+    "preparing":          ("📦", "Préparé / Emballé",        "Votre colis est en cours de préparation."),
+    "handed_over":        ("🚛", "Remis au transporteur",    "Votre colis a été remis au transporteur."),
+    "in_transit":         ("🔄", "En transit",               "Votre colis est en transit."),
+    "out_for_delivery":   ("🛵", "En cours de livraison",    "Votre colis est en cours de livraison."),
+    "delivered":          ("✅", "Livré",                    "Votre colis a été livré. Merci !"),
+    "returned":           ("↩️", "Retourné",                 "Votre colis a été retourné."),
+}
+
+
+@app.route("/api/orders/<int:order_id>/delivery", methods=["POST"])
+@seller_required
+def create_delivery(order_id):
+    """Vendeur crée le suivi de livraison pour une commande."""
+    d     = request.json or {}
+    shop  = q("SELECT id FROM shops WHERE seller_id=%s", (g.current_user["id"],), one=True)
+    order = q("SELECT * FROM orders WHERE id=%s", (order_id,), one=True)
+    if not order:
+        return jsonify({"error": "Commande introuvable"}), 404
+
+    delivery_type   = d.get("delivery_type", "delivery")
+    tracking_number = d.get("tracking_number", "").strip() or None
+    carrier         = d.get("carrier", "").strip() or None
+    carrier_url     = d.get("carrier_url", "").strip() or None
+    notes           = d.get("notes", "").strip() or None
+    estimated_date  = d.get("estimated_date") or None
+
+    # Vérifier si livraison déjà créée
+    existing = q("SELECT id FROM deliveries WHERE order_id=%s AND shop_id=%s",
+                 (order_id, shop["id"]), one=True)
+    if existing:
+        return jsonify({"error": "Livraison déjà créée pour cette commande"}), 409
+
+    delivery_id = run_returning("""
+        INSERT INTO deliveries(order_id,shop_id,status,delivery_type,tracking_number,carrier,carrier_url,notes,estimated_date)
+        VALUES(%s,%s,'preparing',%s,%s,%s,%s,%s,%s) RETURNING id
+    """, (order_id, shop["id"], delivery_type, tracking_number, carrier, carrier_url, notes, estimated_date))
+
+    # Premier événement
+    emoji, label, _ = DELIVERY_STATUSES["preparing"]
+    run("INSERT INTO delivery_events(delivery_id,status,description) VALUES(%s,%s,%s)",
+        (delivery_id, "preparing", f"{emoji} Colis préparé et emballé par le vendeur."))
+
+    # Mettre à jour le statut de la commande
+    run("UPDATE orders SET status='processing', updated_at=NOW() WHERE id=%s", (order_id,))
+
+    # Push client
+    push_to_user(order["buyer_id"],
+        "📦 Votre colis est préparé !",
+        f"Commande #{order_id} — Le vendeur prépare votre colis.",
+        url="/", tag=f"delivery-{order_id}"
+    )
+
+    return jsonify({"delivery_id": delivery_id, "message": "Suivi de livraison créé"}), 201
+
+
+@app.route("/api/orders/<int:order_id>/delivery", methods=["GET"])
+@auth_required
+def get_delivery(order_id):
+    """Récupère le suivi de livraison d'une commande."""
+    delivery = q("""
+        SELECT d.*, s.name as shop_name
+        FROM deliveries d JOIN shops s ON s.id=d.shop_id
+        WHERE d.order_id=%s
+    """, (order_id,), one=True)
+    if not delivery:
+        return jsonify({"error": "Aucun suivi disponible"}), 404
+
+    events = rows_to_list(q("""
+        SELECT * FROM delivery_events WHERE delivery_id=%s ORDER BY created_at ASC
+    """, (delivery["id"],)))
+
+    return jsonify({"delivery": rows_to_list([delivery])[0], "events": events})
+
+
+@app.route("/api/deliveries/<int:delivery_id>/status", methods=["PUT"])
+@seller_required
+def update_delivery_status(delivery_id):
+    """Vendeur met à jour le statut de livraison."""
+    d       = request.json or {}
+    status  = d.get("status")
+    notes   = d.get("notes", "").strip() or None
+    location = d.get("location", "").strip() or None
+    tracking_number = d.get("tracking_number", "").strip() or None
+    carrier         = d.get("carrier", "").strip() or None
+    carrier_url     = d.get("carrier_url", "").strip() or None
+    estimated_date  = d.get("estimated_date") or None
+
+    if status not in DELIVERY_STATUSES:
+        return jsonify({"error": f"Statut invalide. Valeurs: {list(DELIVERY_STATUSES.keys())}"}), 400
+
+    shop     = q("SELECT id FROM shops WHERE seller_id=%s", (g.current_user["id"],), one=True)
+    delivery = q("SELECT d.*, o.buyer_id, o.id as order_id FROM deliveries d JOIN orders o ON o.id=d.order_id WHERE d.id=%s AND d.shop_id=%s",
+                 (delivery_id, shop["id"]), one=True)
+    if not delivery:
+        return jsonify({"error": "Livraison introuvable"}), 404
+
+    # Mettre à jour la livraison
+    updates = {"status": status, "updated_at": "NOW()"}
+    if status == "delivered":
+        run("""UPDATE deliveries SET status=%s, delivered_at=NOW(), updated_at=NOW(),
+               tracking_number=COALESCE(%s,tracking_number),
+               carrier=COALESCE(%s,carrier), carrier_url=COALESCE(%s,carrier_url),
+               estimated_date=COALESCE(%s::date,estimated_date)
+               WHERE id=%s""",
+            (status, tracking_number, carrier, carrier_url, estimated_date, delivery_id))
+        run("UPDATE orders SET status='delivered', updated_at=NOW() WHERE id=%s", (delivery["order_id"],))
+    else:
+        run("""UPDATE deliveries SET status=%s, updated_at=NOW(),
+               tracking_number=COALESCE(%s,tracking_number),
+               carrier=COALESCE(%s,carrier), carrier_url=COALESCE(%s,carrier_url),
+               estimated_date=COALESCE(%s::date,estimated_date)
+               WHERE id=%s""",
+            (status, tracking_number, carrier, carrier_url, estimated_date, delivery_id))
+        # Sync statut commande
+        order_status_map = {
+            "handed_over":      "shipped",
+            "in_transit":       "shipped",
+            "out_for_delivery": "shipped",
+            "returned":         "cancelled",
+        }
+        if status in order_status_map:
+            run("UPDATE orders SET status=%s, updated_at=NOW() WHERE id=%s",
+                (order_status_map[status], delivery["order_id"]))
+
+    # Ajouter événement historique
+    emoji, label, default_desc = DELIVERY_STATUSES[status]
+    description = notes or default_desc
+    run("INSERT INTO delivery_events(delivery_id,status,description,location) VALUES(%s,%s,%s,%s)",
+        (delivery_id, status, f"{emoji} {description}", location))
+
+    # Push notification au client
+    _, push_title, push_body = DELIVERY_STATUSES[status]
+    push_to_user(delivery["buyer_id"],
+        f"{emoji} {push_title}",
+        f"Commande #{delivery['order_id']} — {description}",
+        url="/", tag=f"delivery-update-{delivery_id}"
+    )
+
+    return jsonify({"message": "Statut mis à jour", "status": status})
+
+
+@app.route("/api/deliveries", methods=["GET"])
+@seller_required
+def get_seller_deliveries():
+    """Liste toutes les livraisons du vendeur."""
+    shop       = q("SELECT id FROM shops WHERE seller_id=%s", (g.current_user["id"],), one=True)
+    deliveries = rows_to_list(q("""
+        SELECT d.*, o.total_amount, u.name as buyer_name, u.phone as buyer_phone
+        FROM deliveries d
+        JOIN orders o ON o.id=d.order_id
+        JOIN users u ON u.id=o.buyer_id
+        WHERE d.shop_id=%s
+        ORDER BY d.updated_at DESC
+    """, (shop["id"],)))
+    return jsonify(deliveries)
+
+
+@app.route("/api/track/<tracking_number>", methods=["GET"])
+def track_by_number(tracking_number):
+    """Suivi public par numéro de tracking."""
+    delivery = q("""
+        SELECT d.*, s.name as shop_name, o.id as order_id
+        FROM deliveries d
+        JOIN shops s ON s.id=d.shop_id
+        JOIN orders o ON o.id=d.order_id
+        WHERE d.tracking_number=%s
+    """, (tracking_number,), one=True)
+    if not delivery:
+        return jsonify({"error": "Numéro de suivi introuvable"}), 404
+    events = rows_to_list(q(
+        "SELECT * FROM delivery_events WHERE delivery_id=%s ORDER BY created_at ASC",
+        (delivery["id"],)
+    ))
+    return jsonify({"delivery": rows_to_list([delivery])[0], "events": events})
+
 
 # ==============================================================================
 # ADMIN — Gestion complète vendeurs, commandes, utilisateurs, produits
