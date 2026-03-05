@@ -6,6 +6,8 @@ import sqlite3
 import hashlib
 import os
 import json
+import urllib.request
+import urllib.parse
 from datetime import datetime
 from functools import wraps
 from flask import Flask, request, jsonify, g, send_from_directory
@@ -17,6 +19,43 @@ STATIC   = os.path.join(BASE_DIR, "static")
 
 app = Flask(__name__, static_folder=STATIC, static_url_path="")
 app.secret_key = "nexashop_secret_2026"
+
+# --- Twilio SMS ---------------------------------------------------------------
+TWILIO_SID    = os.environ.get("TWILIO_SID",    "AC5dd3e34db0ca71f9edd2280e64828020")
+TWILIO_TOKEN  = os.environ.get("TWILIO_TOKEN",  "1e454698c062a894606dd3269b09371d")
+TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER", "+17405737973")
+
+def send_sms(to_number, message):
+    """
+    Envoie un SMS via Twilio.
+    to_number : format international ex: +2250700000000
+    Retourne True si succès, False sinon.
+    """
+    if not to_number or not to_number.startswith("+"):
+        print(f"[SMS] Numéro invalide : {to_number}")
+        return False
+    try:
+        url  = f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_SID}/Messages.json"
+        data = urllib.parse.urlencode({
+            "From": TWILIO_NUMBER,
+            "To":   to_number,
+            "Body": message,
+        }).encode("utf-8")
+
+        import base64
+        credentials = base64.b64encode(f"{TWILIO_SID}:{TWILIO_TOKEN}".encode()).decode()
+        req = urllib.request.Request(url, data=data, headers={
+            "Authorization": f"Basic {credentials}",
+            "Content-Type":  "application/x-www-form-urlencoded",
+        })
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read().decode())
+            print(f"[SMS] Envoyé à {to_number} — SID: {result.get('sid')}")
+            return True
+    except Exception as e:
+        print(f"[SMS] Erreur envoi à {to_number} : {e}")
+        return False
+
 
 # --- CORS manuel (pas besoin de flask-cors) -----------------------------------
 @app.after_request
@@ -102,11 +141,12 @@ def seller_required(f):
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():
-    d = request.json or {}
+    d     = request.json or {}
     name  = d.get("name", "").strip()
     email = d.get("email", "").strip().lower()
     pw    = d.get("password", "")
     role  = d.get("role", "buyer")
+    phone = d.get("phone", "").strip()
 
     if not all([name, email, pw]):
         return jsonify({"error": "Champs requis manquants"}), 400
@@ -117,15 +157,15 @@ def register():
     if existing:
         return jsonify({"error": "Email déjà utilisé"}), 409
 
-    cur = run("INSERT INTO users(name,email,password,role) VALUES(?,?,?,?)",
-              (name, email, hash_pw(pw), role))
+    cur = run("INSERT INTO users(name,email,password,role,phone) VALUES(?,?,?,?,?)",
+              (name, email, hash_pw(pw), role, phone or None))
     uid = cur.lastrowid
 
     if role == "seller":
         run("INSERT INTO shops(seller_id,name,description) VALUES(?,?,?)",
             (uid, f"Boutique de {name}", "Ma nouvelle boutique NexaShop"))
 
-    user = dict(q("SELECT id,name,email,role,created_at FROM users WHERE id=?", (uid,), one=True))
+    user = dict(q("SELECT id,name,email,role,phone,created_at FROM users WHERE id=?", (uid,), one=True))
     return jsonify({"token": make_token(uid), "user": user}), 201
 
 
@@ -694,7 +734,7 @@ def wave_checkout():
 def wave_confirm(order_id):
     """
     Le client confirme avoir effectué le paiement Wave.
-    Met à jour la commande et décrémente les stocks.
+    Met à jour la commande, décrémente les stocks et envoie les SMS.
     """
     order = q("SELECT * FROM orders WHERE id=? AND buyer_id=?",
               (order_id, g.current_user["id"]), one=True)
@@ -712,6 +752,55 @@ def wave_confirm(order_id):
 
     if order["promo_code"]:
         run("UPDATE promo_codes SET used_count=used_count+1 WHERE code=?", (order["promo_code"],))
+
+    # ── SMS au(x) vendeur(s) ──────────────────────────────────────────────────
+    # Récupérer les boutiques concernées par cette commande
+    shops_in_order = q("""
+        SELECT DISTINCT s.id, s.name, s.wave_number, u.name as seller_name
+        FROM order_items oi
+        JOIN shops s ON s.id = oi.shop_id
+        JOIN users u ON u.id = s.seller_id
+        WHERE oi.order_id = ?
+    """, (order_id,))
+
+    buyer_name = g.current_user["name"]
+    total_fmt  = f"{int(order['total_amount']):,}".replace(",", " ")
+
+    for shop in shops_in_order:
+        # Calculer le montant pour cette boutique spécifiquement
+        shop_total = q("""
+            SELECT COALESCE(SUM(oi.quantity * oi.unit_price), 0)
+            FROM order_items oi
+            WHERE oi.order_id=? AND oi.shop_id=?
+        """, (order_id, shop["id"]), one=True)[0]
+
+        shop_total_fmt = f"{int(shop_total):,}".replace(",", " ")
+
+        # Récupérer le numéro du vendeur depuis users
+        seller_user = q("SELECT phone FROM users WHERE id=(SELECT seller_id FROM shops WHERE id=?)",
+                       (shop["id"],), one=True)
+
+        # SMS au vendeur (sur son numéro Wave s'il est au format international)
+        if shop["wave_number"] and shop["wave_number"].startswith("+"):
+            msg_vendeur = (
+                f"NexaShop - Nouvelle commande !\n"
+                f"Commande #{order_id}\n"
+                f"Client : {buyer_name}\n"
+                f"Montant : {shop_total_fmt} FCFA\n"
+                f"Paiement Wave recu. Preparez la livraison !"
+            )
+            send_sms(shop["wave_number"], msg_vendeur)
+
+    # ── SMS de confirmation au client ─────────────────────────────────────────
+    buyer_phone = q("SELECT phone FROM users WHERE id=?", (g.current_user["id"],), one=True)
+    if buyer_phone and buyer_phone["phone"]:
+        msg_client = (
+            f"NexaShop - Commande confirmee !\n"
+            f"Commande #{order_id} - {total_fmt} FCFA\n"
+            f"Votre paiement Wave a ete recu.\n"
+            f"Merci pour votre achat !"
+        )
+        send_sms(buyer_phone["phone"], msg_client)
 
     return jsonify({"message": f"Commande #{order_id} confirmée !", "order_id": order_id})
 
@@ -749,12 +838,12 @@ def get_subscription_wave_link():
 def confirm_subscription():
     """
     Le vendeur confirme avoir payé l'abonnement.
-    En production, vous validez manuellement via votre app Wave.
+    Active la boutique et envoie un SMS de confirmation.
     """
     if g.current_user["role"] != "seller":
         return jsonify({"error": "Réservé aux vendeurs"}), 403
 
-    wave_ref = (request.json or {}).get("wave_ref", "")  # référence transaction Wave
+    wave_ref = (request.json or {}).get("wave_ref", "")
     shop     = q("SELECT * FROM shops WHERE seller_id=?", (g.current_user["id"],), one=True)
 
     run("""
@@ -763,6 +852,17 @@ def confirm_subscription():
             subscription_date=datetime('now')
         WHERE seller_id=?
     """, (g.current_user["id"],))
+
+    # SMS de confirmation au vendeur
+    if shop and shop["wave_number"] and shop["wave_number"].startswith("+"):
+        msg = (
+            f"NexaShop - Boutique activee !\n"
+            f"Bonjour {g.current_user['name']},\n"
+            f"Votre boutique \"{shop['name']}\" est maintenant active.\n"
+            f"Vous pouvez publier vos produits !\n"
+            f"nexashop-ci.netlify.app"
+        )
+        send_sms(shop["wave_number"], msg)
 
     return jsonify({"message": "Abonnement activé ! Votre boutique est maintenant visible.", "shop_id": shop["id"]})
 
