@@ -1241,6 +1241,191 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: #0a0812; }
   ::-webkit-scrollbar-thumb { background: #3d1f6e; border-radius: 3px; }
+
+  /* =====================================================
+     RESPONSIVE MOBILE — max 768px
+  ===================================================== */
+  @media (max-width: 768px) {
+
+    /* NAV */
+    nav {
+      padding: 0 16px;
+      height: 56px;
+      position: fixed;
+      width: 100%;
+    }
+
+    .nav-links { display: none; }
+
+    .nav-actions { gap: 8px; }
+    .nav-actions .btn { padding: 6px 12px; font-size: 0.72rem; }
+
+    /* Menu burger */
+    .nav-burger {
+      display: flex !important;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      margin-right: 8px;
+    }
+    .nav-burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #e8e0f5;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* Menu mobile déroulant */
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      background: #0d0a18;
+      border-bottom: 1px solid rgba(124,58,237,0.3);
+      padding: 16px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      color: #a99cc5;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 14px 8px;
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+      cursor: pointer;
+      display: block;
+    }
+    .nav-mobile-menu a:last-child { border-bottom: none; }
+    .nav-mobile-menu a.active { color: var(--gold); }
+
+    /* Décalage du contenu pour la nav fixe */
+    body { padding-top: 56px; }
+
+    /* HERO */
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .hero-left { padding: 48px 24px 40px; }
+    .hero-right { display: none; }
+    .hero-title { font-size: 2.8rem !important; }
+    .hero-subtitle { font-size: 0.95rem; }
+
+    /* Stats HOME */
+    .stats-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 12px !important;
+      padding: 24px 16px !important;
+    }
+    .stat-card:first-child { grid-column: span 2; }
+
+    /* Catégories HOME */
+    .home-categories-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 10px !important;
+    }
+
+    /* SEARCH */
+    .search-section {
+      padding: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-select { min-width: unset; flex: 1; font-size: 0.82rem; }
+
+    /* CATALOGUE */
+    .catalogue-layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      display: none;
+    }
+    .products-area { padding: 16px; }
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px;
+    }
+    .product-img { height: 160px !important; }
+    .product-name { font-size: 0.9rem !important; }
+    .product-price { font-size: 0.88rem !important; }
+
+    /* Filtres mobiles */
+    .mobile-filter-bar {
+      display: flex !important;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #0d0a18;
+      border-bottom: 1px solid rgba(124,58,237,0.2);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .mobile-filter-bar::-webkit-scrollbar { display: none; }
+    .mobile-filter-bar .category-tag {
+      white-space: nowrap;
+      font-size: 0.78rem;
+      padding: 6px 14px;
+    }
+
+    /* DASHBOARD */
+    .page-inner { padding: 16px !important; }
+    .dashboard-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 12px;
+    }
+    .dash-value { font-size: 1.6rem !important; }
+    .table-wrap { overflow-x: auto; }
+    table { min-width: 600px; }
+
+    /* CART */
+    .cart-layout {
+      grid-template-columns: 1fr !important;
+      padding: 16px !important;
+      gap: 16px;
+    }
+    .order-summary { position: static !important; }
+    .cart-item { flex-wrap: wrap; gap: 12px; }
+    .cart-item-img { width: 70px !important; height: 70px !important; font-size: 1.8rem !important; }
+
+    /* MODAL */
+    .modal { padding: 28px 20px; width: 95%; }
+    .modal-title { font-size: 1.4rem; }
+
+    /* PAGE INNER */
+    .form-grid { grid-template-columns: 1fr !important; }
+    .form-group.full { grid-column: span 1 !important; }
+
+    /* HERO BUTTONS */
+    .hero-buttons { flex-direction: column; gap: 12px; }
+    .hero-buttons .btn { width: 100%; text-align: center; padding: 14px 24px; }
+  }
+
+  /* Tablette — max 1024px */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    nav { padding: 0 24px; }
+    .hero-left { padding: 60px 40px; }
+    .hero-title { font-size: 3rem !important; }
+    .hero-right { padding: 40px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .dashboard-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .catalogue-layout { grid-template-columns: 220px 1fr; }
+    .cart-layout { grid-template-columns: 1fr 320px !important; }
+    .page-inner { padding: 24px !important; }
+  }
+
+  /* Cacher le burger sur desktop */
+  .nav-burger { display: none; }
+  .nav-mobile-menu { display: none; }
+  .mobile-filter-bar { display: none; }
 </style>
 </head>
 <body>
@@ -1254,11 +1439,24 @@
     <li><a onclick="showPage('dashboard')" id="nav-dashboard">Espace Vendeur</a></li>
     <li><a onclick="showPage('cart')" id="nav-cart">Panier <span id="cart-count" style="color:var(--gold)"></span></a></li>
   </ul>
-  <div class="nav-actions">
-    <button class="btn btn-outline" onclick="openModal()">Connexion</button>
-    <button class="btn btn-primary" onclick="openModal('register')">S'inscrire</button>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="nav-burger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-actions" id="nav-actions">
+      <button class="btn btn-outline" onclick="openModal()">Connexion</button>
+      <button class="btn btn-primary" onclick="openModal('register')">S'inscrire</button>
+    </div>
   </div>
 </nav>
+
+<!-- Menu mobile -->
+<div class="nav-mobile-menu" id="mobile-menu">
+  <a onclick="showPage('home');toggleMobileMenu()" id="mob-home">🏠 Accueil</a>
+  <a onclick="showPage('catalogue');toggleMobileMenu()" id="mob-catalogue">🛍️ Catalogue</a>
+  <a onclick="showPage('dashboard');toggleMobileMenu()" id="mob-dashboard">📊 Espace Vendeur</a>
+  <a onclick="showPage('cart');toggleMobileMenu()" id="mob-cart">🛒 Panier <span id="cart-count-mobile" style="color:var(--gold)"></span></a>
+</div>
 
 <!-- BANNIÈRE API HORS LIGNE -->
 <div id="api-status" style="display:none;background:#2d1040;border-bottom:1px solid rgba(248,113,113,0.3);padding:10px 40px;align-items:center;gap:12px;font-size:0.85rem;color:#fca5a5;">
@@ -1277,7 +1475,7 @@
         <em>Prospérez.</em>
       </h1>
       <p class="hero-subtitle">
-        NexaShop connecte vendeurs passionnés et acheteurs exigeants. 
+        Agora connecte vendeurs passionnés et acheteurs exigeants. 
         Découvrez des produits uniques ou lancez votre boutique en quelques minutes.
       </p>
       <div class="hero-ctas">
@@ -1364,6 +1562,17 @@
       <option value="price_desc">Prix décroissant</option>
       <option value="rating">Mieux notés</option>
     </select>
+  </div>
+
+  <!-- Barre catégories mobile (visible uniquement sur mobile) -->
+  <div class="mobile-filter-bar" id="mobile-filter-bar">
+    <button class="category-tag active" onclick="filterCatMobile(this,'all')">Tout</button>
+    <button class="category-tag" onclick="filterCatMobile(this,'mode')">👗 Mode</button>
+    <button class="category-tag" onclick="filterCatMobile(this,'tech')">💻 Tech</button>
+    <button class="category-tag" onclick="filterCatMobile(this,'maison')">🏠 Maison</button>
+    <button class="category-tag" onclick="filterCatMobile(this,'art')">🎨 Art</button>
+    <button class="category-tag" onclick="filterCatMobile(this,'bio')">🌿 Bio</button>
+    <button class="category-tag" onclick="filterCatMobile(this,'livres')">📚 Livres</button>
   </div>
 
   <div class="catalogue-layout">
@@ -1576,7 +1785,7 @@
         <button class="btn btn-outline" style="padding:8px 16px;border-color:rgba(200,150,62,0.4);color:var(--gold);" onclick="applyPromo()">OK</button>
       </div>
       <div class="summary-total"><span>Total</span><span id="total-price">-</span></div>
-      <button class="checkout-btn" onclick="checkout()">Commander maintenant →</button>
+      <button class="checkout-btn" onclick="checkout()">📱 Payer avec Wave</button>
       <p style="text-align:center;font-size:0.75rem;color:#6b5f8a;margin-top:12px;">🔒 Paiement 100% sécurisé</p>
     </div>
   </div>
@@ -1818,7 +2027,30 @@
 
   function updateCartBadge() {
     const total = cart.reduce((s, x) => s + x.qty, 0);
-    document.getElementById('cart-count').textContent = total > 0 ? `(${total})` : '';
+    const badge = total > 0 ? `(${total})` : '';
+    document.getElementById('cart-count').textContent = badge;
+    const mob = document.getElementById('cart-count-mobile');
+    if (mob) mob.textContent = badge;
+  }
+
+  // ── Burger menu mobile ────────────────────────────────
+  function toggleMobileMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('mobile-menu');
+    const burger = document.querySelector('.nav-burger');
+    if (menu && burger && !menu.contains(e.target) && !burger.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  async function filterCatMobile(el, cat) {
+    document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    activeCat = cat;
+    await loadCatalogue();
   }
 
   function renderCart() {
@@ -1874,13 +2106,133 @@
   async function checkout() {
     if (!cart.length) { showToast('Votre panier est vide !'); return; }
     if (!authToken)   { openModal(); showToast('Connectez-vous pour commander'); return; }
+
+    const btn = document.querySelector('.checkout-btn');
+    if (btn) { btn.textContent = 'Préparation...'; btn.disabled = true; }
+
     const promoCode = document.querySelector('.promo-input input')?.value?.trim();
     try {
       const items = cart.map(x => ({ product_id: x.id, quantity: x.qty }));
-      const res = await api('POST', '/orders', { items, promo_code: promoCode || undefined });
+      const res = await api('POST', '/payment/wave/checkout', {
+        items, promo_code: promoCode || undefined
+      });
+      showWavePaymentModal(res);
+    } catch (e) {
+      showToast('❌ ' + e.message);
+    } finally {
+      if (btn) { btn.textContent = '📱 Payer avec Wave'; btn.disabled = false; }
+    }
+  }
+
+  function showWavePaymentModal(res) {
+    // Supprimer ancienne modal si elle existe
+    const old = document.getElementById('wave-modal');
+    if (old) old.remove();
+
+    const linksHtml = res.wave_links.map(link => `
+      <div style="background:#1a1430;border:1px solid rgba(124,58,237,0.25);border-radius:6px;padding:18px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div>
+            <div style="font-weight:600;color:#e8e0f5;">${link.shop_name}</div>
+            <div style="font-size:0.8rem;color:#6b5f8a;">${link.items_count} article(s)</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.1rem;color:#d4a843;font-weight:700;">
+            ${Math.round(link.amount).toLocaleString('fr-FR')} FCFA
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;background:#0d0a18;padding:10px 14px;border-radius:4px;">
+          <span style="font-size:1.2rem;">📱</span>
+          <span style="font-family:'DM Mono',monospace;font-size:0.9rem;color:#a78bfa;">${link.wave_number}</span>
+        </div>
+        <a href="${link.wave_url}" target="_blank"
+           style="display:block;text-align:center;background:linear-gradient(135deg,#1eb8ff,#0d9ed4);color:white;padding:12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:0.9rem;letter-spacing:0.03em;">
+          📲 Ouvrir Wave — ${Math.round(link.amount).toLocaleString('fr-FR')} FCFA
+        </a>
+      </div>
+    `).join('');
+
+    const modal = document.createElement('div');
+    modal.id = 'wave-modal';
+    modal.style.cssText = `
+      position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;
+      display:flex;align-items:center;justify-content:center;padding:20px;
+    `;
+    modal.innerHTML = `
+      <div style="background:#0d0a18;border:1px solid rgba(124,58,237,0.4);border-radius:8px;
+                  padding:32px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="font-size:2.5rem;margin-bottom:8px;">📱</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:#e8e0f5;margin-bottom:6px;">
+            Paiement Wave
+          </h2>
+          <p style="color:#6b5f8a;font-size:0.85rem;">Commande #${res.order_id}</p>
+        </div>
+
+        <div style="background:#1a1430;border-radius:6px;padding:14px 18px;margin-bottom:20px;
+                    display:flex;justify-content:space-between;align-items:center;">
+          <span style="color:#a99cc5;font-size:0.88rem;">Total à payer</span>
+          <span style="font-family:'DM Mono',monospace;font-size:1.2rem;color:#d4a843;font-weight:700;">
+            ${res.total.toLocaleString('fr-FR')} FCFA
+          </span>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <p style="color:#a99cc5;font-size:0.82rem;margin-bottom:12px;text-align:center;">
+            Cliquez sur le bouton Wave de chaque boutique pour effectuer le paiement
+          </p>
+          ${linksHtml}
+        </div>
+
+        <div style="background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);
+                    border-radius:4px;padding:12px 16px;margin-bottom:20px;font-size:0.82rem;color:#c8a84b;">
+          ⚠️ Après avoir payé via Wave, cliquez sur "Confirmer le paiement" ci-dessous.
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button onclick="closeWaveModal()" 
+                  style="flex:1;padding:12px;background:transparent;border:1px solid rgba(124,58,237,0.3);
+                         color:#6b5f8a;border-radius:4px;cursor:pointer;font-size:0.85rem;">
+            Annuler
+          </button>
+          <button onclick="confirmWavePayment(${res.order_id})"
+                  style="flex:2;padding:12px;background:linear-gradient(135deg,#7c3aed,#9333ea);
+                         color:white;border:none;border-radius:4px;cursor:pointer;
+                         font-weight:600;font-size:0.9rem;">
+            ✅ J'ai payé — Confirmer
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  function closeWaveModal() {
+    const modal = document.getElementById('wave-modal');
+    if (modal) modal.remove();
+  }
+
+  async function confirmWavePayment(orderId) {
+    try {
+      const res = await api('POST', `/payment/wave/confirm/${orderId}`);
+      closeWaveModal();
       cart = []; saveCart(); updateCartBadge(); renderCart();
-      showToast(`✅ Commande #${res.order_id} créée — Total : ${formatCFA(res.total)}`);
-    } catch (e) { showToast('❌ ' + e.message); }
+      showToast(`✅ Commande #${orderId} confirmée ! Merci pour votre achat.`);
+      showPage('home');
+    } catch (e) {
+      showToast('❌ ' + e.message);
+    }
+  }
+
+  async function checkPaymentReturn() {
+    const params  = new URLSearchParams(window.location.search);
+    const orderId = params.get('order');
+    const status  = params.get('status');
+    if (orderId && status === 'success') {
+      showToast(`✅ Paiement reçu ! Commande #${orderId} confirmée.`);
+      localStorage.removeItem('nexashop_pending_order');
+      window.history.replaceState({}, '', window.location.pathname);
+      showPage('home');
+    }
   }
 
   async function applyPromo() {
@@ -2141,8 +2493,92 @@
       localStorage.setItem('nexashop_user',  JSON.stringify(currentUser));
       updateNavUser();
       closeModal();
-      showToast(`🎉 Compte créé ! Bienvenue sur NexaShop, ${res.user.name} !`);
-      if (res.user.role === 'seller') showPage('dashboard');
+
+      if (res.user.role === 'seller') {
+        // Afficher le flow d'abonnement Wave
+        showToast(`🎉 Compte créé ! Activez votre boutique en payant l'abonnement.`);
+        await showSubscriptionFlow();
+      } else {
+        showToast(`🎉 Compte créé ! Bienvenue sur NexaShop, ${res.user.name} !`);
+      }
+    } catch (e) { showToast('❌ ' + e.message); }
+  }
+
+  async function showSubscriptionFlow() {
+    try {
+      const res = await api('GET', '/payment/wave/subscription');
+      if (res.already_paid) { showPage('dashboard'); return; }
+
+      const old = document.getElementById('subscription-modal');
+      if (old) old.remove();
+
+      const modal = document.createElement('div');
+      modal.id = 'subscription-modal';
+      modal.style.cssText = `
+        position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;
+        display:flex;align-items:center;justify-content:center;padding:20px;
+      `;
+      modal.innerHTML = `
+        <div style="background:#0d0a18;border:1px solid rgba(212,168,67,0.4);border-radius:8px;
+                    padding:36px;max-width:420px;width:100%;text-align:center;">
+          <div style="font-size:3rem;margin-bottom:16px;">🏪</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#e8e0f5;margin-bottom:8px;">
+            Activez votre boutique
+          </h2>
+          <p style="color:#a99cc5;font-size:0.9rem;margin-bottom:24px;">
+            Pour publier vos produits sur NexaShop, payez l'abonnement annuel via Wave.
+          </p>
+
+          <div style="background:#1a1430;border-radius:6px;padding:20px;margin-bottom:24px;">
+            <div style="font-size:2rem;font-family:'DM Mono',monospace;color:#d4a843;font-weight:700;margin-bottom:4px;">
+              3 000 FCFA
+            </div>
+            <div style="color:#6b5f8a;font-size:0.82rem;">Abonnement annuel vendeur</div>
+            <div style="margin-top:12px;padding:10px;background:#0d0a18;border-radius:4px;">
+              <div style="font-size:0.78rem;color:#6b5f8a;margin-bottom:4px;">Votre paiement va sur</div>
+              <div style="font-family:'DM Mono',monospace;color:#a78bfa;font-size:0.95rem;">${res.wave_number}</div>
+            </div>
+          </div>
+
+          <a href="${res.wave_url}" target="_blank"
+             style="display:block;background:linear-gradient(135deg,#1eb8ff,#0d9ed4);color:white;
+                    padding:14px;border-radius:4px;text-decoration:none;font-weight:600;
+                    font-size:0.95rem;margin-bottom:12px;">
+            📲 Payer 3 000 FCFA via Wave
+          </a>
+
+          <div style="margin-bottom:16px;">
+            <input type="text" id="wave-ref-input" placeholder="Référence Wave (optionnel)"
+                   style="width:100%;background:#1a1430;border:1px solid rgba(124,58,237,0.25);
+                          color:#e8e0f5;padding:10px 14px;border-radius:4px;font-size:0.85rem;
+                          outline:none;margin-bottom:8px;">
+          </div>
+
+          <button onclick="confirmSubscription()"
+                  style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);
+                         color:white;border:none;border-radius:4px;cursor:pointer;
+                         font-weight:600;font-size:0.9rem;margin-bottom:10px;">
+            ✅ J'ai payé — Activer ma boutique
+          </button>
+          <button onclick="document.getElementById('subscription-modal').remove();showPage('home');"
+                  style="width:100%;padding:10px;background:transparent;
+                         border:1px solid rgba(124,58,237,0.2);color:#6b5f8a;
+                         border-radius:4px;cursor:pointer;font-size:0.82rem;">
+            Plus tard
+          </button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    } catch (e) { showToast('❌ ' + e.message); }
+  }
+
+  async function confirmSubscription() {
+    const waveRef = document.getElementById('wave-ref-input')?.value?.trim();
+    try {
+      await api('POST', '/payment/wave/subscription/confirm', { wave_ref: waveRef });
+      document.getElementById('subscription-modal')?.remove();
+      showToast('🎉 Boutique activée ! Vous pouvez maintenant publier vos produits.');
+      showPage('dashboard');
     } catch (e) { showToast('❌ ' + e.message); }
   }
 
@@ -2194,7 +2630,7 @@
     updateCartBadge();
     updateNavUser();
     await checkApiStatus();
-    // Charger les produits de la BDD pour la page d'accueil
+    await checkPaymentReturn();
     try {
       const data = await api('GET', '/products?limit=12');
       products = data.products;
