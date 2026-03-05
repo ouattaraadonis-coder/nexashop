@@ -7,6 +7,11 @@ import json
 import base64
 import urllib.request
 import urllib.parse
+import urllib.error
+import time
+import struct
+import hmac
+import hashlib as hl
 from datetime import datetime
 from functools import wraps
 import psycopg2
@@ -78,6 +83,65 @@ def make_wave_link(phone_number, amount, description=""):
     clean = phone_number.replace(" ", "").replace("-", "")
     desc  = urllib.parse.quote(description)
     return f"https://pay.wave.com/m/{clean}?currency=XOF&amount={int(amount)}&note={desc}"
+
+# ==============================================================================
+# WEB PUSH — Notifications navigateur
+# ==============================================================================
+# Clés VAPID — générées une seule fois (gardez-les secrètes en production)
+VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
+VAPID_PUBLIC_KEY  = os.environ.get(
+    "VAPID_PUBLIC_KEY",
+    "BNexaShopVAPIDPublicKeyPlaceholder_ReplaceWithRealKey"
+)
+VAPID_SUBJECT     = os.environ.get("VAPID_SUBJECT", "mailto:admin@nexashop.ci")
+
+
+def send_web_push(subscription_info, payload):
+    """
+    Envoie une Web Push notification via l'API pywebpush.
+    subscription_info: dict avec endpoint, keys.p256dh, keys.auth
+    payload: dict {title, body, icon, url, tag}
+    """
+    try:
+        from pywebpush import webpush, WebPushException
+        webpush(
+            subscription_info=subscription_info,
+            data=json.dumps(payload),
+            vapid_private_key=VAPID_PRIVATE_KEY,
+            vapid_claims={"sub": VAPID_SUBJECT},
+        )
+        return True
+    except Exception as e:
+        print(f"[PUSH] Erreur : {e}")
+        return False
+
+
+def push_to_user(user_id, title, body, url="/", tag="nexashop", icon="/icon-192.png"):
+    """Envoie une push notification à toutes les souscriptions d'un utilisateur."""
+    subs = q(
+        "SELECT * FROM push_subscriptions WHERE user_id=%s AND is_active=1",
+        (user_id,)
+    )
+    payload = {"title": title, "body": body, "url": url, "tag": tag, "icon": icon}
+    for sub in subs:
+        info = {
+            "endpoint": sub["endpoint"],
+            "keys": {"p256dh": sub["p256dh"], "auth": sub["auth_key"]}
+        }
+        ok = send_web_push(info, payload)
+        if not ok:
+            # Désactiver les souscriptions expirées
+            run("UPDATE push_subscriptions SET is_active=0 WHERE id=%s", (sub["id"],))
+
+
+def push_to_role(role, title, body, url="/", tag="nexashop"):
+    """Envoie une push notification à tous les utilisateurs d'un rôle."""
+    users = q(
+        "SELECT DISTINCT ps.user_id FROM push_subscriptions ps JOIN users u ON u.id=ps.user_id WHERE u.role=%s AND ps.is_active=1",
+        (role,)
+    )
+    for u in users:
+        push_to_user(u["user_id"], title, body, url, tag)
 
 # ==============================================================================
 # CORS
@@ -278,6 +342,15 @@ def init_db():
             used_count INTEGER DEFAULT 0,
             expires_at TIMESTAMP,
             is_active  INTEGER DEFAULT 1
+        );
+        CREATE TABLE IF NOT EXISTS push_subscriptions (
+            id         SERIAL PRIMARY KEY,
+            user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            endpoint   TEXT NOT NULL UNIQUE,
+            p256dh     TEXT NOT NULL,
+            auth_key   TEXT NOT NULL,
+            is_active  INTEGER DEFAULT 1,
+            created_at TIMESTAMP DEFAULT NOW()
         );
     """)
 
@@ -612,6 +685,27 @@ def update_order_status(oid):
     if status not in ("processing","shipped","delivered","cancelled"):
         return jsonify({"error": "Statut invalide"}), 400
     run("UPDATE orders SET status=%s, updated_at=NOW() WHERE id=%s", (status, oid))
+    # Push au client selon le statut
+    order = q("SELECT * FROM orders WHERE id=%s", (oid,), one=True)
+    if order:
+        if status == "shipped":
+            push_to_user(order["buyer_id"],
+                "🚚 Commande expédiée !",
+                f"Votre commande #{oid} est en route !",
+                url="/", tag=f"shipped-{oid}"
+            )
+        elif status == "delivered":
+            push_to_user(order["buyer_id"],
+                "📬 Commande livrée !",
+                f"Votre commande #{oid} a été livrée. Merci !",
+                url="/", tag=f"delivered-{oid}"
+            )
+        elif status == "cancelled":
+            push_to_user(order["buyer_id"],
+                "❌ Commande annulée",
+                f"Votre commande #{oid} a été annulée.",
+                url="/", tag=f"cancelled-{oid}"
+            )
     return jsonify({"message": "Statut mis a jour"})
 
 # ==============================================================================
@@ -847,7 +941,7 @@ def wave_confirm(order_id):
         run("UPDATE promo_codes SET used_count=used_count+1 WHERE code=%s", (order["promo_code"],))
 
     shops_in_order = q("""
-        SELECT DISTINCT s.id, s.name, s.wave_number
+        SELECT DISTINCT s.id, s.name, s.wave_number, s.seller_id
         FROM order_items oi JOIN shops s ON s.id=oi.shop_id
         WHERE oi.order_id=%s
     """, (order_id,))
@@ -858,6 +952,7 @@ def wave_confirm(order_id):
             FROM order_items oi WHERE oi.order_id=%s AND oi.shop_id=%s
         """, (order_id, shop["id"]), one=True)["tot"]
 
+        # SMS vendeur
         if shop["wave_number"] and shop["wave_number"].startswith("+"):
             send_sms(shop["wave_number"],
                 f"NexaShop - Nouvelle commande!\n"
@@ -866,7 +961,24 @@ def wave_confirm(order_id):
                 f"Montant: {int(shop_total)} FCFA\n"
                 f"Paiement Wave recu. Preparez la livraison!"
             )
+        # Push navigateur vendeur
+        push_to_user(
+            shop["seller_id"],
+            "🛍️ Nouvelle commande !",
+            f"Commande #{order_id} \u2014 {int(shop_total):,} FCFA de {g.current_user['name']}".replace(",", " "),
+            url="/?page=dashboard",
+            tag=f"order-{order_id}"
+        )
 
+    # Push admin
+    push_to_role("admin",
+        "📦 Nouvelle commande sur NexaShop",
+        f"Commande #{order_id} \u2014 {int(order['total_amount']):,} FCFA".replace(",", " "),
+        url="/?page=admin",
+        tag=f"admin-order-{order_id}"
+    )
+
+    # SMS + Push client
     buyer = q("SELECT phone FROM users WHERE id=%s", (g.current_user["id"],), one=True)
     if buyer and buyer["phone"]:
         send_sms(buyer["phone"],
@@ -875,6 +987,12 @@ def wave_confirm(order_id):
             f"Total: {int(order['total_amount'])} FCFA\n"
             f"Merci pour votre achat!"
         )
+    push_to_user(
+        g.current_user["id"],
+        "✅ Commande confirmée !",
+        f"Votre commande #{order_id} a bien été reçue.",
+        url="/", tag=f"order-confirm-{order_id}"
+    )
 
     return jsonify({"message": f"Commande #{order_id} confirmee!", "order_id": order_id})
 
@@ -902,6 +1020,7 @@ def confirm_subscription():
     shop = q("SELECT * FROM shops WHERE seller_id=%s", (g.current_user["id"],), one=True)
     run("UPDATE shops SET subscription_paid=1, subscription_date=NOW() WHERE seller_id=%s",
         (g.current_user["id"],))
+    # SMS vendeur
     if shop and shop["wave_number"] and shop["wave_number"].startswith("+"):
         send_sms(shop["wave_number"],
             f"NexaShop - Boutique activee!\n"
@@ -909,6 +1028,18 @@ def confirm_subscription():
             f"Votre boutique est maintenant active.\n"
             f"Publiez vos produits sur NexaShop!"
         )
+    # Push vendeur
+    push_to_user(g.current_user["id"],
+        "🏪 Boutique activée !",
+        "Votre boutique est maintenant visible. Publiez vos premiers produits !",
+        url="/", tag="subscription"
+    )
+    # Push admin — nouveau vendeur actif
+    push_to_role("admin",
+        "🎉 Nouveau vendeur actif !",
+        f"{g.current_user['name']} vient d'activer sa boutique \"{shop['name']}\".",
+        url="/", tag="new-vendor"
+    )
     return jsonify({"message": "Abonnement active!", "shop_id": shop["id"]})
 
 
@@ -921,6 +1052,42 @@ def update_wave_number(shop_id):
     run("UPDATE shops SET wave_number=%s WHERE id=%s AND seller_id=%s",
         (wave_number, shop_id, g.current_user["id"]))
     return jsonify({"message": "Numero Wave mis a jour"})
+
+# ==============================================================================
+# PUSH SUBSCRIPTIONS — Enregistrement et gestion
+# ==============================================================================
+@app.route("/api/push/vapid-public-key", methods=["GET"])
+def get_vapid_public_key():
+    return jsonify({"public_key": VAPID_PUBLIC_KEY})
+
+
+@app.route("/api/push/subscribe", methods=["POST"])
+@auth_required
+def push_subscribe():
+    d        = request.json or {}
+    endpoint = d.get("endpoint")
+    p256dh   = d.get("keys", {}).get("p256dh")
+    auth_key = d.get("keys", {}).get("auth")
+    if not all([endpoint, p256dh, auth_key]):
+        return jsonify({"error": "Donnees de souscription incompletes"}), 400
+    existing = q("SELECT id FROM push_subscriptions WHERE endpoint=%s", (endpoint,), one=True)
+    if existing:
+        run("UPDATE push_subscriptions SET user_id=%s, p256dh=%s, auth_key=%s, is_active=1 WHERE endpoint=%s",
+            (g.current_user["id"], p256dh, auth_key, endpoint))
+    else:
+        run("INSERT INTO push_subscriptions(user_id,endpoint,p256dh,auth_key) VALUES(%s,%s,%s,%s)",
+            (g.current_user["id"], endpoint, p256dh, auth_key))
+    return jsonify({"message": "Souscription enregistree"})
+
+
+@app.route("/api/push/unsubscribe", methods=["POST"])
+@auth_required
+def push_unsubscribe():
+    endpoint = (request.json or {}).get("endpoint")
+    if endpoint:
+        run("UPDATE push_subscriptions SET is_active=0 WHERE endpoint=%s AND user_id=%s",
+            (endpoint, g.current_user["id"]))
+    return jsonify({"message": "Souscription supprimee"})
 
 # ==============================================================================
 # ADMIN — Gestion complète vendeurs, commandes, utilisateurs, produits
