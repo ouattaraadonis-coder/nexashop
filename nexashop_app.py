@@ -914,7 +914,7 @@ def update_wave_number(shop_id):
     return jsonify({"message": "Numero Wave mis a jour"})
 
 # ==============================================================================
-# ADMIN
+# ADMIN — Gestion complète vendeurs, commandes, utilisateurs, produits
 # ==============================================================================
 @app.route("/api/admin/stats", methods=["GET"])
 @auth_required
@@ -929,6 +929,129 @@ def admin_stats():
         "orders":   q("SELECT COUNT(*) as c FROM orders", (), one=True)["c"],
         "revenue":  round(float(q("SELECT COALESCE(SUM(total_amount),0) as s FROM orders WHERE status!='cancelled'",(),one=True)["s"]),2),
     })
+
+
+@app.route("/api/admin/vendors", methods=["GET"])
+@auth_required
+def admin_vendors():
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    vendors = rows_to_list(q("""
+        SELECT u.id as user_id, u.name, u.email, u.phone, u.is_active,
+               s.id as shop_id, s.name as shop_name, s.wave_number,
+               s.subscription_paid, s.subscription_date, s.total_sales,
+               (SELECT COUNT(*) FROM products WHERE shop_id=s.id AND is_active=1) as product_count
+        FROM users u
+        LEFT JOIN shops s ON s.seller_id=u.id
+        WHERE u.role='seller'
+        ORDER BY u.created_at DESC
+    """))
+    return jsonify({"vendors": vendors})
+
+
+@app.route("/api/admin/orders", methods=["GET"])
+@auth_required
+def admin_orders():
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    orders = rows_to_list(q("""
+        SELECT o.*, u.name as buyer_name, u.email as buyer_email
+        FROM orders o JOIN users u ON u.id=o.buyer_id
+        ORDER BY o.created_at DESC
+        LIMIT 200
+    """))
+    return jsonify({"orders": orders})
+
+
+@app.route("/api/admin/users", methods=["GET"])
+@auth_required
+def admin_users():
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    users = rows_to_list(q("""
+        SELECT id, name, email, phone, role, is_active, created_at
+        FROM users ORDER BY created_at DESC
+    """))
+    return jsonify({"users": users})
+
+
+@app.route("/api/admin/products", methods=["GET"])
+@auth_required
+def admin_products():
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    products = rows_to_list(q("""
+        SELECT p.*, s.name as shop_name, c.name as category_name
+        FROM products p
+        JOIN shops s ON s.id=p.shop_id
+        LEFT JOIN categories c ON c.id=p.category_id
+        ORDER BY p.created_at DESC
+    """))
+    return jsonify({"products": products})
+
+
+@app.route("/api/admin/shops/<int:shop_id>/activate", methods=["PUT"])
+@auth_required
+def admin_activate_shop(shop_id):
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    run("UPDATE shops SET subscription_paid=1, subscription_date=NOW() WHERE id=%s", (shop_id,))
+    # SMS au vendeur
+    shop = q("SELECT s.*, u.name as seller_name FROM shops s JOIN users u ON u.id=s.seller_id WHERE s.id=%s", (shop_id,), one=True)
+    if shop and shop["wave_number"] and shop["wave_number"].startswith("+"):
+        send_sms(shop["wave_number"],
+            f"NexaShop - Boutique activee par l'admin!\n"
+            f"Bonjour {shop['seller_name']},\n"
+            f"Votre boutique \"{shop['name']}\" est maintenant active.\n"
+            f"Vous pouvez publier vos produits!"
+        )
+    return jsonify({"message": "Boutique activee"})
+
+
+@app.route("/api/admin/shops/<int:shop_id>/deactivate", methods=["PUT"])
+@auth_required
+def admin_deactivate_shop(shop_id):
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    run("UPDATE shops SET subscription_paid=0 WHERE id=%s", (shop_id,))
+    return jsonify({"message": "Boutique desactivee"})
+
+
+@app.route("/api/admin/users/<int:user_id>/toggle", methods=["PUT"])
+@auth_required
+def admin_toggle_user(user_id):
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    user = q("SELECT is_active FROM users WHERE id=%s", (user_id,), one=True)
+    if not user:
+        return jsonify({"error": "Utilisateur introuvable"}), 404
+    new_status = 0 if user["is_active"] else 1
+    run("UPDATE users SET is_active=%s WHERE id=%s", (new_status, user_id))
+    return jsonify({"message": "Statut mis a jour", "is_active": new_status})
+
+
+@app.route("/api/admin/users/<int:user_id>", methods=["DELETE"])
+@auth_required
+def admin_delete_user(user_id):
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    if user_id == g.current_user["id"]:
+        return jsonify({"error": "Impossible de supprimer votre propre compte"}), 400
+    run("DELETE FROM users WHERE id=%s", (user_id,))
+    return jsonify({"message": "Utilisateur supprime"})
+
+
+@app.route("/api/admin/products/<int:product_id>/toggle", methods=["PUT"])
+@auth_required
+def admin_toggle_product(product_id):
+    if g.current_user["role"] != "admin":
+        return jsonify({"error": "Reserve a l'admin"}), 403
+    prod = q("SELECT is_active FROM products WHERE id=%s", (product_id,), one=True)
+    if not prod:
+        return jsonify({"error": "Produit introuvable"}), 404
+    new_status = 0 if prod["is_active"] else 1
+    run("UPDATE products SET is_active=%s WHERE id=%s", (new_status, product_id))
+    return jsonify({"message": "Statut mis a jour", "is_active": new_status})
 
 # ==============================================================================
 # FRONTEND + HEALTH
